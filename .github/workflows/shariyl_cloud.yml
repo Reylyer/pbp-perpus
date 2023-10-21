@@ -12,6 +12,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Install Twingate
         run: |
           echo "deb [trusted=yes] https://packages.twingate.com/apt/ /" | sudo tee /etc/apt/sources.list.d/twingate.list
@@ -39,7 +40,7 @@ jobs:
           chmod 600 ~/deploy_key
           rsync -chav --delete \
             -e 'ssh -i ~/deploy_key -o StrictHostKeyChecking=no' \
-            --exclude=.git --exclude=.env --exclude=storage --exclude=public --exclude=resources/views/home.blade.php ./ ${{env.dest}}
+            --exclude=.git --exclude=.env --exclude=vendor --exclude=storage --exclude=public --exclude=resources/views/home.blade.php ./ ${{env.dest}}
 
       - name: install packages
         uses: appleboy/ssh-action@master
