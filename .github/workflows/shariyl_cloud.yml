@@ -68,7 +68,7 @@ jobs:
 
       - name: Sync
         env:
-          dest: "${{ secrets.SSH_USER }}@10.10.10.10:/home/${{ secrets.SSH_USER }}/servers/sot.corp/"
+          dest: "shariyl@10.10.10.10:/home/shariyl/servers/sot.corp/"
         run: |
           echo "${{secrets.DEPLOY_KEY}}" > ~/deploy_key
           chmod 600 ~/deploy_key
@@ -80,11 +80,11 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: 10.10.10.10
-          username: ${{ secrets.SSH_USER }}
+          username: shariyl
           key: ${{ secrets.DEPLOY_KEY }}
           port: 22
           script: |
-            cd /home/${{ secrets.SSH_USER }}/servers/sot.corp
+            cd /home/shariyl/servers/sot.corp
             composer install
 
       - name: Check the deployed service URL
