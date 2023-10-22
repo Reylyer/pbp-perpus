@@ -13,18 +13,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      # - name: Install Twingate
-      #   run: |
-      #     echo "deb [trusted=yes] https://packages.twingate.com/apt/ /" | sudo tee /etc/apt/sources.list.d/twingate.list
-      #     sudo apt update -yq
-      #     sudo apt install -yq twingate
-
       - name: secret to file
         run: |
-          echo $SECRET_KEY_BASE64 | base64 --decode > service_key.json
-        env:
-          SECRET_KEY_BASE64: ewogICJ2ZXJzaW9uIjogIjEiLAogICJuZXR3b3JrIjogInJleWx5ZXIudHdpbmdhdGUuY29tIiwKICAic2VydmljZV9hY2NvdW50X2lkIjogImExNGJmMmUwLTkxMDItNDJiNi05Njk0LTQwYjI3YzE0MTk0MiIsCiAgInByaXZhdGVfa2V5IjogIi0tLS0tQkVHSU4gUFJJVkFURSBLRVktLS0tLVxuTUlHSEFnRUFNQk1HQnlxR1NNNDlBZ0VHQ0NxR1NNNDlBd0VIQkcwd2F3SUJBUVFnSWowczNqYTBFWDc4REszQ1xuT1hzNkZYb29RNHZEeUl5N1dKTjhNVTlmb2thaFJBTkNBQVJ5eWh6b1psYzA3cFFFY2F1SXMyaWxwOGswNUF4RVxuVVg3U0ROcTFlS01OcS9weGJVelZTVzR4L1hWcHAzbjdVTDlaMWZnOHV1aWRaN0UvVkI2YmlmcjNcbi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0iLAogICJrZXlfaWQiOiAiWXAxRHJQVnVqeEFKZmJOMm93aFBKM0tXbkkxTlFNNG5EN0MyZEFwUVF2cyIsCiAgImV4cGlyZXNfYXQiOiAiMjAyNC0xMC0yMVQxOToxMToxOSswMDowMCIsCiAgImxvZ2luX3BhdGgiOiAiL2FwaS92NC9oZWFkbGVzcy9sb2dpbiIKfQ==
-
+          echo $TWINGATE_SERVICE_KEY > service_key.json
+          
       - name: Install Twingate
         shell: bash
         run: |
@@ -38,29 +30,17 @@ jobs:
           TWINGATE_STATUS=$(sudo twingate status)
           echo $TWINGATE_STATUS
 
-      # - name: print secrets
-      #   run: |
-      #       echo $TWINGATE_SERVICE_KEY > service_key.json
-      #       cat service_key.json
-      #   shell: bash
-      #   env:
-      #     TWINGATE_SERVICE_KEY: ${{ secrets.SERVICE_KEY }}
-
-      # - name: Setup and start Twingate
-      #   run: |
-      #     sudo twingate setup --headless service_key.json
-      #     sudo twingate start
-
       - name: (optional) Twingate status
         run: twingate status
 
       - name: (optional) Twingate logs
         run: journalctl -u twingate  
 
-      # - name: remove service_key secret
-      #   run: |
-      #     rm service_key.json
-      #   shell: bash
+      - name: remove service_key secret
+        run: |
+          rm service_key.json
+        shell: bash
+      
       - name: (optional) Debug information for connection
         run: |
           nslookup sot.corp
@@ -68,9 +48,9 @@ jobs:
 
       - name: Sync
         env:
-          dest: "shariyl@10.10.10.10:/home/shariyl/servers/sot.corp/"
+          dest: "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/servers/sot.corp/"
         run: |
-          echo ${{secrets.DEPLOY_KEY}} > ~/deploy_key
+          echo "${{secrets.DEPLOY_KEY}}" > ~/deploy_key
           chmod 600 ~/deploy_key
           rsync -chav --delete \
             -e 'ssh -i ~/deploy_key -o StrictHostKeyChecking=no' \
@@ -79,12 +59,12 @@ jobs:
       - name: install packages
         uses: appleboy/ssh-action@master
         with:
-          host: 10.10.10.10
-          username: shariyl
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
           port: 22
           script: |
-            cd /home/shariyl/servers/sot.corp
+            cd /home/${{ secrets.SSH_USER }}/servers/sot.corp
             composer install
 
 
