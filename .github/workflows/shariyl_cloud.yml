@@ -29,6 +29,10 @@ jobs:
         shell: bash
         run: |
           curl https://binaries.twingate.com/client/linux/install.sh | sudo bash
+      - name: Test NetworkManager
+        shell: bash
+        run: |
+          sudo apt install network-manager
       - name: Setup and start Twingate
         shell: bash
         run: |
