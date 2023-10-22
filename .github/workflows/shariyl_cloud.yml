@@ -22,7 +22,7 @@ jobs:
       - name: secret to file
         run: |
           SECRET_KEY="${{ secrets.SERVICE_KEY }}"
-          echo "$SECRET_KEY" > service_key.json
+          echo "$SECRET_KEY" | base64 --decode > service_key.json
 
       - name: print secrets
         run: |
