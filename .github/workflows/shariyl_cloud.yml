@@ -32,7 +32,8 @@ jobs:
       - name: Test NetworkManager
         shell: bash
         run: |
-          sudo apt install network-manager
+          sudo apt install network-manager -y
+          sudo systemctl start NetworkManager
       - name: Setup and start Twingate
         shell: bash
         run: |
