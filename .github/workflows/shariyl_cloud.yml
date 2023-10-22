@@ -28,9 +28,7 @@ jobs:
       - name: Install Twingate
         shell: bash
         run: |
-          echo "deb [trusted=yes] https://packages.twingate.com/apt/ /" | sudo tee /etc/apt/sources.list.d/twingate.list
-          sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/twingate.list" -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
-          sudo apt install -yq twingate
+          curl https://binaries.twingate.com/client/linux/install.sh | sudo bash
       - name: Setup and start Twingate
         shell: bash
         run: |
