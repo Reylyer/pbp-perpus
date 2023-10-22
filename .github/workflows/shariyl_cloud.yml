@@ -21,8 +21,9 @@ jobs:
 
       - name: secret to file
         run: |
-          SECRET_KEY="${{ secrets.SERVICE_KEY }}"
-          echo "$SECRET_KEY" | base64 --decode > service_key.json
+          echo $SECRET_KEY_BASE64 | base64 --decode > service_key.json
+        env:
+          SECRET_KEY_BASE64: ewogICJ2ZXJzaW9uIjogIjEiLAogICJuZXR3b3JrIjogInJleWx5ZXIudHdpbmdhdGUuY29tIiwKICAic2VydmljZV9hY2NvdW50X2lkIjogImExNGJmMmUwLTkxMDItNDJiNi05Njk0LTQwYjI3YzE0MTk0MiIsCiAgInByaXZhdGVfa2V5IjogIi0tLS0tQkVHSU4gUFJJVkFURSBLRVktLS0tLVxuTUlHSEFnRUFNQk1HQnlxR1NNNDlBZ0VHQ0NxR1NNNDlBd0VIQkcwd2F3SUJBUVFnSWowczNqYTBFWDc4REszQ1xuT1hzNkZYb29RNHZEeUl5N1dKTjhNVTlmb2thaFJBTkNBQVJ5eWh6b1psYzA3cFFFY2F1SXMyaWxwOGswNUF4RVxuVVg3U0ROcTFlS01OcS9weGJVelZTVzR4L1hWcHAzbjdVTDlaMWZnOHV1aWRaN0UvVkI2YmlmcjNcbi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0iLAogICJrZXlfaWQiOiAiWXAxRHJQVnVqeEFKZmJOMm93aFBKM0tXbkkxTlFNNG5EN0MyZEFwUVF2cyIsCiAgImV4cGlyZXNfYXQiOiAiMjAyNC0xMC0yMVQxOToxMToxOSswMDowMCIsCiAgImxvZ2luX3BhdGgiOiAiL2FwaS92NC9oZWFkbGVzcy9sb2dpbiIKfQ==
 
       - name: print secrets
         run: |
