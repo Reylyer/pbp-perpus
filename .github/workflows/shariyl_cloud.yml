@@ -19,13 +19,18 @@ jobs:
           sudo apt update -yq
           sudo apt install -yq twingate
 
-      - name: print secrets
+      - name: secret to file
         run: |
-            echo $TWINGATE_SERVICE_KEY > service_key.json
-            cat service_key.json
-        shell: bash
-        env:
-          TWINGATE_SERVICE_KEY: ${{ secrets.SERVICE_KEY }}
+          SECRET_KEY="${{ secrets.SERVICE_KEY }}"
+          echo "$SECRET_KEY" > service_key.json
+
+      # - name: print secrets
+      #   run: |
+      #       echo $TWINGATE_SERVICE_KEY > service_key.json
+      #       cat service_key.json
+      #   shell: bash
+      #   env:
+      #     TWINGATE_SERVICE_KEY: ${{ secrets.SERVICE_KEY }}
 
       - name: Setup and start Twingate
         run: |
