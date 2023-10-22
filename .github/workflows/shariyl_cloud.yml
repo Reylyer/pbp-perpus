@@ -70,7 +70,7 @@ jobs:
         env:
           dest: "shariyl@10.10.10.10:/home/shariyl/servers/sot.corp/"
         run: |
-          echo "${{secrets.DEPLOY_KEY}}" > ~/deploy_key
+          echo ${{secrets.DEPLOY_KEY}} > ~/deploy_key
           chmod 600 ~/deploy_key
           rsync -chav --delete \
             -e 'ssh -i ~/deploy_key -o StrictHostKeyChecking=no' \
@@ -86,7 +86,7 @@ jobs:
           script: |
             cd /home/shariyl/servers/sot.corp
             composer install
-            
+
 
       - name: Check the deployed service URL
         uses: jtalk/url-health-check-action@v3
