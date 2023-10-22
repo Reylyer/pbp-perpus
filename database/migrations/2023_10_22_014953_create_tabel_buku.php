@@ -22,6 +22,11 @@ return new class extends Migration
             $table->string('kota_terbit');
             $table->string('editor');
             $table->string('file_gambar');
+            $table->timestamp('tgl_insert')->useCurrent();
+            $table->timestamp('tgl_update')->useCurrent();
+            $table->integer('stok');
+            $table->integer('stok_tersedia');
+
             $table->foreignId('idkategori');
             $table->foreign('idkategori')
                   ->references('idkategori')
