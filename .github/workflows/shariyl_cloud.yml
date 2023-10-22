@@ -68,7 +68,7 @@ jobs:
 
       - name: Sync
         env:
-          dest: "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/servers/sot.corp/"
+          dest: "${{ secrets.SSH_USER }}@10.10.10.10:/home/${{ secrets.SSH_USER }}/servers/sot.corp/"
         run: |
           echo "${{secrets.DEPLOY_KEY}}" > ~/deploy_key
           chmod 600 ~/deploy_key
@@ -79,7 +79,7 @@ jobs:
       - name: install packages
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}
+          host: 10.10.10.10
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
           port: 22
