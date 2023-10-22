@@ -24,6 +24,11 @@ jobs:
           SECRET_KEY="${{ secrets.SERVICE_KEY }}"
           echo "$SECRET_KEY" > service_key.json
 
+      - name: print secrets
+        run: |
+          cat service_key.json
+        shell: bash
+
       # - name: print secrets
       #   run: |
       #       echo $TWINGATE_SERVICE_KEY > service_key.json
