@@ -19,11 +19,17 @@ jobs:
           sudo apt update -yq
           sudo apt install -yq twingate
 
-      - name: Setup and start Twingate
+      - name: print secrets
+        run: |
+            echo $TWINGATE_SERVICE_KEY &gt;&gt; service_key.json
+            cat service_key.json
+        shell: bash
         env:
           TWINGATE_SERVICE_KEY: ${{ secrets.SERVICE_KEY }}
+
+      - name: Setup and start Twingate
         run: |
-          echo $TWINGATE_SERVICE_KEY | sudo twingate setup --headless=-
+          sudo twingate setup --headless service_key.json
           sudo twingate start
 
       - name: (optional) Twingate status
@@ -31,6 +37,11 @@ jobs:
 
       - name: (optional) Twingate logs
         run: journalctl -u twingate  
+
+      - name: remove service_key secret
+        run: |
+          rm service_key.json
+        shell: bash
 
       - name: Sync
         env:
