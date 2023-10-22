@@ -16,7 +16,8 @@ jobs:
       - name: secret to file
         run: |
           echo $TWINGATE_SERVICE_KEY | base64 --decode > service_key.json
-          cat service_key.json
+        env:
+          TWINGATE_SERVICE_KEY: ${{ secrets.SERVICE_KEY }}
           
       - name: Install Twingate
         shell: bash
