@@ -18,14 +18,6 @@ jobs:
       #     echo "deb [trusted=yes] https://packages.twingate.com/apt/ /" | sudo tee /etc/apt/sources.list.d/twingate.list
       #     sudo apt update -yq
       #     sudo apt install -yq twingate
-      
-      - uses: twingate/github-action@v1
-        with:
-          # The Twingate Service Key used to connect Twingate to the proper service
-          # Learn more about [Twingate Services](https://docs.twingate.com/docs/services)
-          #
-          # Required
-          service-key: ${{ secrets.SERVICE_KEY }}
 
       - name: secret to file
         run: |
@@ -33,10 +25,24 @@ jobs:
         env:
           SECRET_KEY_BASE64: ewogICJ2ZXJzaW9uIjogIjEiLAogICJuZXR3b3JrIjogInJleWx5ZXIudHdpbmdhdGUuY29tIiwKICAic2VydmljZV9hY2NvdW50X2lkIjogImExNGJmMmUwLTkxMDItNDJiNi05Njk0LTQwYjI3YzE0MTk0MiIsCiAgInByaXZhdGVfa2V5IjogIi0tLS0tQkVHSU4gUFJJVkFURSBLRVktLS0tLVxuTUlHSEFnRUFNQk1HQnlxR1NNNDlBZ0VHQ0NxR1NNNDlBd0VIQkcwd2F3SUJBUVFnSWowczNqYTBFWDc4REszQ1xuT1hzNkZYb29RNHZEeUl5N1dKTjhNVTlmb2thaFJBTkNBQVJ5eWh6b1psYzA3cFFFY2F1SXMyaWxwOGswNUF4RVxuVVg3U0ROcTFlS01OcS9weGJVelZTVzR4L1hWcHAzbjdVTDlaMWZnOHV1aWRaN0UvVkI2YmlmcjNcbi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0iLAogICJrZXlfaWQiOiAiWXAxRHJQVnVqeEFKZmJOMm93aFBKM0tXbkkxTlFNNG5EN0MyZEFwUVF2cyIsCiAgImV4cGlyZXNfYXQiOiAiMjAyNC0xMC0yMVQxOToxMToxOSswMDowMCIsCiAgImxvZ2luX3BhdGgiOiAiL2FwaS92NC9oZWFkbGVzcy9sb2dpbiIKfQ==
 
-      # - name: print secrets
-      #   run: |
-      #     cat service_key.json
-      #   shell: bash
+      - name: Install Twingate
+        shell: bash
+        run: |
+          echo "deb [trusted=yes] https://packages.twingate.com/apt/ /" | sudo tee /etc/apt/sources.list.d/twingate.list
+          sudo apt-get update -o Dir::Etc::sourcelist="sources.list.d/twingate.list" -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0"
+          sudo apt install -yq twingate
+      - name: Setup and start Twingate
+        shell: bash
+        run: |
+          sudo twingate setup --headless service_key.json
+          sudo twingate start
+          TWINGATE_STATUS=$(sudo twingate status)
+          echo $TWINGATE_STATUS
+
+      - name: print secrets
+        run: |
+          cat service_key.json
+        shell: bash
 
       # - name: print secrets
       #   run: |
