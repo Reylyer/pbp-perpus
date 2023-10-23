@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Models\Kategori;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\BukuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,7 @@ use App\Http\Controllers\KategoriController;
 
 Route::get('/', function () {
     // redirect to kategori list
-    return redirect()->route('kategori.list');
+    return redirect()->route('buku.list');
 });
 
 // group route for kategori crud using controller
@@ -34,3 +35,7 @@ Route::prefix('kategori')->group(function () {
     Route::post('/do/create', [KategoriController::class, 'doCreate'])->name('kategori.doCreate');
 });
 
+Route::prefix('buku')->group(function () {
+    Route::get('/', [BukuController::class, 'list'])->name('buku.list');
+    Route::get('/{isbn}', [BukuController::class, 'show'])->name('buku.show');
+});
