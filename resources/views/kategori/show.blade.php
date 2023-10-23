@@ -9,7 +9,6 @@
             <div class="card-body">
                 <p class="card-text"><strong>Nama: </strong> {{ $data->nama }}</p>
 
-
                 <a href="{{ route('kategori.list') }}" class="btn btn-primary">Back to List</a>
             </div>
         </div>

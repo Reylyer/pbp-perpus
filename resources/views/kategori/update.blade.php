@@ -4,49 +4,18 @@
 
 @section('content')
     <div class="container">
-        <h2>Edit Book</h2>
-        <form action="{{ route('books.doUpdate', ['id' => $book->id]) }}" method="POST">
+        <h2>Edit Kategori</h2>
+        <form action="{{ route('kategori.doUpdate', ['idkategori' => $data->idkategori]) }}" method="POST">
             @csrf
             @method('PUT')
 
             <div class="form-group">
-                <label for="title">Title:</label>
-                <input type="text" class="form-control" id="title" name="title" value="{{ $book->title }}">
-            </div>
-
-            <div class="form-group">
-                <label for="author">Author:</label>
-                <input type="text" class="form-control" id="author" name="author" value="{{ $book->author }}">
-            </div>
-
-            <div class="form-group">
-                <label for="isbn">ISBN:</label>
-                <input type="text" class="form-control" id="isbn" name="isbn" value="{{ $book->isbn }}">
-            </div>
-
-            <div class="form-group">
-                <label for="price">Price:</label>
-                <input type="text" class="form-control" id="price" name="price" value="{{ $book->price }}">
-            </div>
-
-            <div class="form-group">
-                <label for="stock">Stock:</label>
-                <input type="text" class="form-control" id="stock" name="stock" value="{{ $book->stock }}">
-            </div>
-
-            <div class="form-group">
-                <label for="category">Category:</label>
-                <select class="form-control" id="category" name="category_id">
-                    @foreach($categories as $category)
-                        <option value="{{ $category->id }}" {{ $book->category_id == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }}
-                        </option>
-                    @endforeach
-                </select>
+                <label for="nama">Nama:</label>
+                <input type="text" class="form-control" id="nama" name="nama" value="{{ $data->nama }}">
             </div>
 
             <button type="submit" class="btn btn-primary">Update</button>
-            <a href="{{ route('books.list') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('kategori.list') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 @endsection

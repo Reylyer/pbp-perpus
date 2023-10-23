@@ -15,59 +15,40 @@ class KategoriController extends Controller
         return view('kategori.list', ['data' => $data]);
     }
     
-    function show($id){
-        $data = Kategori::where('idkategori', $id)->first();
+    function show($idkategori){
+        $data = Kategori::where('idkategori', $idkategori)->first();
         return view('kategori.show', ['data' => $data]);
     }
     
-    function update($id){
-        $book = DB::select('select b.*, c.name as category  from books b LEFT JOIN categories c ON b.category_id = c.id WHERE b.id = ?', [$id]);
-        $categories = DB::select('select * from categories');
-        return view('update.books', ['book' => $book[0], 'categories' => $categories]);
+    function update($idkategori){
+        $data = Kategori::where('idkategori', $idkategori)->first();
+        return view('kategori.update', ['data' => $data]);
+
     }
     
-    function doUpdate(Request $request, $id){
-        if(null !== $request->input('title'))
-            $title = $request->input('title');
-        if(null !== $request->input('author'))
-            $author = $request->input('author');
-        if(null !== $request->input('category_id'))
-            $category_id = $request->input('category_id');
-        if(null !== $request->input('price'))
-            $price = $request->input('price');
-        if(null !== $request->input('stock'))
-            $stock = $request->input('stock');
+    function doUpdate(Request $request, $idkategori){
+        if(null !== $request->input('nama'))
+            $nama = $request->input('nama');
 
-        $query = DB::update('update books set title = ?, author = ?, category_id = ?, price = ?, stock = ? where id = ?', [$title, $author, $category_id, $price, $stock, $id]);
-        return redirect()->route('books.list');
+        $query = DB::update('update kategori set nama = ? where idkategori = ?', [$nama, $idkategori]);
+        return redirect()->route('kategori.list');
     }
     
     function create(){
-        $categories = DB::select('select * from categories');
-        return view('create.books', ['categories' => $categories]);
+        return view('kategori.create');
     }
     
     function doCreate(Request $request){
-        if(null !== $request->input('title'))
-            $title = $request->input('title');
-        if(null !== $request->input('author'))
-            $author = $request->input('author');
-        if(null !== $request->input('category_id'))
-            $category_id = $request->input('category_id');
-        if(null !== $request->input('price'))
-            $price = $request->input('price');
-        if(null !== $request->input('stock'))
-            $stock = $request->input('stock');
-        if(null !== $request->input('isbn'))
-            $isbn = $request->input('isbn');
+        if(null !== $request->input('nama'))
+            $nama = $request->input('nama');
         
-        $create = DB::insert('insert into books (isbn, title, author, category_id, price, stock) values (?, ?, ?, ?, ?, ?)', [$isbn, $title, $author, $category_id, $price, $stock]);
-        return redirect()->route('books.list');
+        $create = DB::insert('insert into kategori (nama) values (?)', [$nama]);
+        return redirect()->route('kategori.list');
 
     }
     
-    function doDelete(Request $request, $id){
-        $delete = DB::delete('delete from books where id = ?', [$id]);
-        return redirect()->route('books.list');
+    function doDelete(Request $request, $idkategori){
+        $delete = DB::delete('delete from kategori where idkategori = ?', [$idkategori]);
+        return redirect()->route('kategori.list');
     }
 }

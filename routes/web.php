@@ -31,6 +31,6 @@ Route::prefix('kategori')->group(function () {
     // dodelete and doupdate
     Route::put('/do/update/{idkategori}', [KategoriController::class, 'doUpdate'])->name('kategori.doUpdate');
     Route::delete('/do/delete/{idkategori}', [KategoriController::class, 'doDelete'])->name('kategori.doDelete');
-    Route::post('/do/create/{idkategori}', [KategoriController::class, 'doCreate'])->name('kategori.doCreate');
+    Route::post('/do/create', [KategoriController::class, 'doCreate'])->name('kategori.doCreate');
 });
 

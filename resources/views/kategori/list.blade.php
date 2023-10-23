@@ -14,7 +14,6 @@
                 <tr>
                     <th>No</th>
                     <th>Nama</th>
-
                 </tr>
             </thead>
             <tbody>
