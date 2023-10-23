@@ -75,7 +75,7 @@ jobs:
         with:
           # HTTP Health Check for successful deployment testing
           # Check the following URLs one by one sequentially
-          url: http://sot.corp
+          url: http://10.10.10.10
           max-attempts: 3 # Optional, defaults to 1
           retry-delay: 3s # Optional, only applicable to max-attempts > 1
 
