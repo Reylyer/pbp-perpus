@@ -41,6 +41,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('kategori.list') }}">Kategori</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('buku.list') }}">Buku</a>
+                        </li>
                         <!-- Add more navigation items here as needed -->
                     </ul>
 
