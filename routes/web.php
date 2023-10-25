@@ -37,5 +37,7 @@ Route::prefix('kategori')->group(function () {
 
 Route::prefix('buku')->group(function () {
     Route::get('/', [BukuController::class, 'list'])->name('buku.list');
+    Route::get('/create', [BukuController::class, 'create'])->name('buku.create');
     Route::get('/{isbn}', [BukuController::class, 'show'])->name('buku.show');
+    Route::post('/do/create', [BukuController::class, 'doCreate'])->name('buku.doCreate');
 });

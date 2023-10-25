@@ -5,7 +5,7 @@
       <div class="card mt-3">
         <div class="card-header">Books Data</div>
         <div class="card-body">
-          {{-- <a href="{{ route('books.add') }}" class="btn btn-primary">+ Add New Book</a> --}}
+          <a href="{{ route('buku.create') }}" class="btn btn-primary">+ Add New Book</a>
           <table class="table table-striped">
             <thead>
               <tr>

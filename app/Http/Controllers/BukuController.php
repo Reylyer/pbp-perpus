@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buku;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -27,5 +29,42 @@ class BukuController extends Controller
         );
 
         return view('buku.show', ['book' => $book[0]]);
+    }
+
+    function create(){
+        $kategori_pair = Kategori::all('idkategori', 'nama');
+        return view('buku.create', ['kategori_pair' => $kategori_pair]);
+    }
+
+    function doCreate(Request $request){
+        $validated = $request->validate([
+            'isbn'        => 'required|string|unique:buku',
+            'judul'       => 'required|string',
+            'idkategori'  => 'required',
+            'pengarang'   => 'required|string',
+            'penerbit'    => 'required|string',
+            'kota_terbit' => 'required|string',
+            'editor'      => 'required|string',
+            'file_gambar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'stok'        => 'nullable|numeric',
+        ]);
+
+        if ($validated['file_gambar'] !== null) {
+            $imageName = time().'.'.$validated['file_gambar']->extension();
+            $validated['file_gambar']->storeAs('images', $imageName);
+            $validated['file_gambar'] = $imageName;
+        }
+
+        $validated['stok_tersedia'] = $validated['stok'];
+
+        $buku = Buku::create($validated);
+        error_log($buku);
+        $buku->save();
+
+        // $create = DB::insert('insert into buku (isbn, judul, idkategori, pengarang, kota_terbit, editor, file_gambar, stok) values (?)',
+        //                     [$isbn, $judul, $idkategori, $pengarang, $penerbit, $editor, $file_gambar]);
+
+        return redirect()->route('buku.list');
+
     }
 }
