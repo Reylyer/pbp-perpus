@@ -11,10 +11,7 @@ class BukuController extends Controller
 {
     function list(Request $request)
     {
-        $books = DB::select(
-            "SELECT b.isbn as isbn, b.judul as judul, k.nama as kategori, b.pengarang as pengarang, b.penerbit as penerbit, YEAR(b.tgl_insert) as tahun
-            FROM buku b JOIN kategori k ON b.idkategori = k.idkategori"
-        );
+        $books = Buku::search($request->s)->get();
 
         return view('buku.list', ['books' => $books]);
     }
@@ -29,6 +26,11 @@ class BukuController extends Controller
         );
 
         return view('buku.show', ['book' => $book[0]]);
+    }
+
+    function search(Request $request)
+    {
+        return Buku::search($request->s)->get();
     }
 
     function create(){

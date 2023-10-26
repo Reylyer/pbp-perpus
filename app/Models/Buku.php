@@ -4,12 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Buku extends Model
 {
     use HasFactory;
-    protected $table = 'buku';
+    use Searchable {
+        Searchable::search as parentSearch;
+    }
 
+    protected $table = 'buku';
     protected $primaryKey = 'idbuku';
     public $incrementing = true;
     protected $fillable = [
@@ -27,4 +31,38 @@ class Buku extends Model
 
     const CREATED_AT = 'tgl_insert';
     const UPDATED_AT = 'tgl_update';
+
+    // relations
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class, 'idkategori');
+    }
+
+    public function getScoutKey(): mixed
+    {
+        return $this->isbn;
+    }
+
+    // https://learnwithdaniel.com/2022/05/laravel-scout-search-in-relationships/
+    public function toSearchableArray()
+    {
+        $searchableArray =  [
+            'isbn' => '',
+            'judul' => '',
+            'pengarang' => '',
+            'penerbit' => '',
+            'kota_terbit' => '',
+            'editor' => '',
+            'kategori.nama' => '',
+        ];
+        return $searchableArray;
+    }
+
+    public static function search($query = '', $callback = null)
+    {
+        return static::parentSearch($query, $callback)->query(function ($builder) {
+            $builder->join('kategori', 'kategori.idkategori', '=', 'buku.idkategori')
+                    ->select('buku.*', 'kategori.nama as nama_kategori');
+        });
+    }
 }

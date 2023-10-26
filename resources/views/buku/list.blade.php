@@ -6,7 +6,12 @@
         <div class="card-header">Books Data</div>
         <div class="card-body">
           <a href="{{ route('buku.create') }}" class="btn btn-primary">+ Add New Book</a>
-          <table class="table table-striped">
+          <form action="" class="d-flex" method="GET">
+            <input id="search" class="form-control me-2" name="s" type="text" placeholder="Search book">
+            <button class="btn btn-outline-primary" type="submit">Search</button>
+          </form>
+
+          <table class="table table-striped" id="tabel-buku">
             <thead>
               <tr>
                 <th>ISBN</th>
@@ -23,7 +28,7 @@
               <tr>
                 <td>{{$book->isbn}}</td>
                 <td>{{$book->judul}}</td>
-                <td>{{$book->kategori}}</td>
+                <td>{{$book->nama_kategori}}</td>
                 <td>{{$book->pengarang}}</td>
                 <td>{{$book->penerbit}}</td>
                 <td>{{$book->tahun}}</td>

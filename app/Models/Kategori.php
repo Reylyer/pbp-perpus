@@ -23,6 +23,11 @@ class Kategori extends Model
     ];
     const FIELD_RELATIONS = [];
 
+    public function buku(){
+
+        return $this->hasMany(Buku::class);
+    }
+
     // public static function list()
     // {
     //     return Kategori::all();
