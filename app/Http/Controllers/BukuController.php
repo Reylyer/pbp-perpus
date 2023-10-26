@@ -11,7 +11,16 @@ class BukuController extends Controller
 {
     function list(Request $request)
     {
-        $books = Buku::search($request->s)->get();
+        $books = DB::select(
+            "SELECT b.isbn as isbn, b.judul as judul, k.nama as nama_kategori, b.pengarang as pengarang, b.penerbit as penerbit, YEAR(b.tgl_insert) as tahun
+            FROM buku b JOIN kategori k ON b.idkategori = k.idkategori
+            WHERE isbn LIKE '%$request->s%'
+            OR b.isbn LIKE '%$request->s%'
+            OR k.nama LIKE '%$request->s%'
+            OR b.pengarang LIKE '%$request->s%'
+            OR b.penerbit LIKE '%$request->s%'
+            ",
+        );
 
         return view('buku.list', ['books' => $books]);
     }
