@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnggotaController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Models\Kategori;
@@ -18,8 +19,15 @@ use App\Http\Controllers\BukuController;
 */
 
 Route::get('/', function () {
-    // redirect to kategori list
+    // redirect to buku list
     return redirect()->route('buku.list');
+});
+
+Route::prefix('/auth')-> group(function () {
+    Route::get('/register', [AnggotaController::class, 'register'])->name('auth.register');
+    Route::get('/login', [AnggotaController::class, 'login'])->name('auth.login');
+    Route::post('/register', [AnggotaController::class, 'doRegister'])->name('auth.doRegister');
+    Route::post('/login', [AnggotaController::class, 'doLogin'])->name('auth.doLogin');
 });
 
 // group route for kategori crud using controller

@@ -1,5 +1,3 @@
-<!-- resources/views/create/kategori.blade.php -->
-
 @extends('layouts.app')
 
 @section('content')
@@ -13,6 +11,7 @@
             </ul>
         </div>
         @endif
+
         <h2>Add new book</h2>
         <form action="{{ route('buku.doCreate') }}" method="POST" enctype="multipart/form-data">
             @csrf
