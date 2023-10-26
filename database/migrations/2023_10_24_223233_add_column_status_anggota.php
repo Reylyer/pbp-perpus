@@ -13,7 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('anggota', function (Blueprint $table) {
+            $table->boolean('status')->default(0);
+        });
     }
 
     /**
