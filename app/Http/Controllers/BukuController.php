@@ -7,7 +7,7 @@ use App\Models\Kategori;
 use App\Models\KomentarBuku;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Redirect;
+use Redirect, Storage;
 
 class BukuController extends Controller
 {
@@ -89,9 +89,8 @@ class BukuController extends Controller
         ]);
 
         if ($validated['file_gambar'] !== null) {
-            $imageName = time().'.'.$validated['file_gambar']->extension();
-            $validated['file_gambar']->storeAs('images', $imageName);
-            $validated['file_gambar'] = $imageName;
+            $validated['file_gambar'] = Storage::disk('public')->put('images', $validated['file_gambar']);
+            error_log($validated['file_gambar']);
         }
 
         $validated['stok_tersedia'] = $validated['stok'];
