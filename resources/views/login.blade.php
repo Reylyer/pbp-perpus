@@ -33,7 +33,7 @@
                             Buat akun</a>
                         </p>
                     </div>
-                    <div class="vstack gap-2 align-items-center">
+                    <div class="hstack gap-2 justify-content-center">
                         <button type="submit" class="btn btn-success w-25" name="submit" value="submit">Login</button>
                         <a href="{{ route('buku.list') }}" class="btn btn-outline-secondary w-25" role="button">Kembali</a>
                     </div>
