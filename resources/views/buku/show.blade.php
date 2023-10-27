@@ -7,7 +7,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-9">
-                        <img src="{{ asset($book->file_gambar) }}" class="img-fluid" alt={{ $book->file_gambar }}>
+                        <img src="/storage/images/{{ $book->file_gambar }}" class="img-fluid" alt={{ $book->file_gambar }}>
                         <table class="table">
                             <tr>
                                 <th>ISBN</th>
