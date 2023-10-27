@@ -3,8 +3,7 @@
 @extends('layouts.app')
 
 @section('content')
-
-    <div class="container">
+    <div class="">
         <div class="card-header d-flex justify-content-between">
         </div>
         <h2>CRUD Table</h2>
