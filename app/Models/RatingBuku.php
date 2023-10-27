@@ -5,19 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class KomentarBuku extends Model
+class RatingBuku extends Model
 {
     use HasFactory;
-    protected $table = 'komentar_buku';
-    protected $primaryKey = 'idkomentar';
+
+    protected $table = 'rating_buku';
+    protected $primaryKey = ['idbuku', 'noktp'];
     public $incrementing = false;
     protected $keyType = 'string';
 
     protected $fillable = [
-        'idkomentar',
         'idbuku',
         'noktp',
-        'komentar',
+        'skor_rating',
+        'tgl_rating'
     ];
 
     public $timestamps = false;

@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Buku;
 use App\Models\Kategori;
 use App\Models\KomentarBuku;
+use App\Models\RatingBuku;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Redirect, Storage;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
 
 class BukuController extends Controller
 {
@@ -55,12 +57,9 @@ class BukuController extends Controller
         $rating = DB::select("SELECT AVG(skor_rating) as rating
                               FROM rating_buku
                               WHERE idbuku = '$idbuku'
-                              GROUP BY skor_rating");
-        if ($rating) {
-            $rating = $rating[0]['rating'];
-        } else {
-            $rating = 0;
-        }
+                              ");
+        
+        $rating = $rating ? number_format($rating[0]->rating, 1) : null;
 
         return view('buku.show', ['book' => $book[0], 'komentar' => $komentar, 'rating' => $rating]);
     }
@@ -106,15 +105,39 @@ class BukuController extends Controller
 
     }
 
-    function komentar(Request $request){
+    function komentar(Request $request, $idbuku){
         $anggota = $request->session()->get('anggota');
-        $komentar = KomentarBuku::create([
-            'idbuku'   => $request->idbuku,
-            'noktp'    => $anggota->noktp,
-            'komentar' => $request->komentar
-        ]);
-        $komentar->save();
 
-        return redirect("/buku/$request->idbuku");
+        if ($request->input('komentar') !== null) {
+            $komentar = KomentarBuku::create([
+                'idbuku'   => $idbuku,
+                'noktp'    => $anggota->noktp,
+                'komentar' => $request->input('komentar')
+            ]);
+            $komentar->save();
+        }
+
+        return redirect("/buku/$idbuku");
+    }
+
+    function rating(Request $request, $idbuku){
+        $anggota = $request->session()->get('anggota');
+
+        $isAlreadyRated = DB::select("SELECT * FROM rating_buku WHERE idbuku = '$idbuku' AND noktp = '$anggota->noktp'");
+
+        if ($isAlreadyRated) {
+            return Redirect::back()->withErrors(['msg' => 'Anda sudah memberikan rating']);
+        }
+
+        if ($request->input('rating') !== null && !$isAlreadyRated) {
+            $rating = RatingBuku::create([
+                'idbuku'      => $idbuku,
+                'noktp'       => $anggota->noktp,
+                'skor_rating' => $request->input('rating')
+            ]);
+            $rating->save();
+        }
+
+        return redirect("/buku/$idbuku");
     }
 }
