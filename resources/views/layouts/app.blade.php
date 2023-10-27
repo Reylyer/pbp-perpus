@@ -27,7 +27,7 @@
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.1/js/bootstrap.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm sticky-top">
             <div class="container">
                 <a class="navbar-brand">
                     SOT Corporation
@@ -36,7 +36,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="collapse navbar-collapse d=flex justify-content-between" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
@@ -53,7 +53,7 @@
                         <!-- Authentication Links -->
                         @guest
                         <li class="nav-item">
-                            <a class="nav-link"></a>
+                            <a href="{{ route('auth.login') }}" class="btn btn-outline-success" role="button">Masuk</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link"></a>
