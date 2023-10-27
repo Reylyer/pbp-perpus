@@ -31,7 +31,18 @@ class BukuController extends Controller
     function show($idbuku)
     {
         $book = DB::select(
-            "SELECT b.idbuku as idbuku, b.isbn as isbn, b.judul as judul, k.nama as kategori, b.pengarang as pengarang, b.penerbit as penerbit, b.kota_terbit as kota_terbit, b.editor as editor, b.file_gambar as file_gambar, b.stok as stok, b.stok_tersedia as stok_tersedia, YEAR(b.tgl_insert) as tahun
+            "SELECT b.idbuku as idbuku,
+                    b.isbn as isbn,
+                    b.judul as judul,
+                    k.nama as kategori,
+                    b.pengarang as pengarang,
+                    b.penerbit as penerbit,
+                    b.kota_terbit as kota_terbit,
+                    b.editor as editor,
+                    b.file_gambar as file_gambar,
+                    b.stok as stok,
+                    b.stok_tersedia as stok_tersedia,
+                    YEAR(b.tgl_insert) as tahun
             FROM buku b JOIN kategori k ON b.idkategori = k.idkategori
             WHERE b.idbuku = ?",
             [$idbuku]
@@ -41,7 +52,17 @@ class BukuController extends Controller
                                   ->where('idbuku', '=', "$idbuku")
                                   ->get();
 
-        return view('buku.show', ['book' => $book[0], 'komentar' => $komentar]);
+        $rating = DB::select("SELECT AVG(skor_rating) as rating
+                              FROM rating_buku
+                              WHERE idbuku = '$idbuku'
+                              GROUP BY skor_rating");
+        if ($rating) {
+            $rating = $rating[0]['rating'];
+        } else {
+            $rating = 0;
+        }
+
+        return view('buku.show', ['book' => $book[0], 'komentar' => $komentar, 'rating' => $rating]);
     }
 
     function search(Request $request)

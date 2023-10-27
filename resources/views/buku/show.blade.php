@@ -7,7 +7,7 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-9">
-                        <img src="" class="img-fluid" alt={{ $book->file_gambar }}>
+                        <img src="{{ asset($book->file_gambar) }}" class="img-fluid" alt={{ $book->file_gambar }}>
                         <table class="table">
                             <tr>
                                 <th>ISBN</th>
@@ -43,6 +43,16 @@
                             <tr>
                                 <th>Stok Tersedia</th>
                                 <td>{{ $book->stok_tersedia }}</td>
+                            </tr>
+                            <tr>
+                                <th>Rating</th>
+                                <td>
+                                    @if ($rating == 0)
+                                    Belum ada rating
+                                    @else
+                                    {{ $rating }}
+                                    @endif
+                                </td>
                             </tr>
                         </table>
                     </div>
