@@ -32,7 +32,7 @@
                 <td>{{$book->pengarang}}</td>
                 <td>{{$book->penerbit}}</td>
                 <td>{{$book->tahun}}</td>
-                <td><a href="{{ route('buku.show', ['isbn' => $book->isbn]) }}"><button class="btn btn-primary btn-sm">Lihat Detail</button></a></td>
+                <td><a href="{{ route('buku.show', ['idbuku' => $book->idbuku]) }}"><button class="btn btn-primary btn-sm">Lihat Detail</button></a></td>
               </tr>
               @endforeach
             </tbody>

@@ -21,7 +21,6 @@ return new class extends Migration
 
             $table->foreign('idbuku')->references('idbuku')->on('buku');
             $table->foreign('noktp')->references('noktp')->on('anggota');
-            $table->unique(['idbuku', 'noktp']);
         });
     }
 

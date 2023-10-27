@@ -50,25 +50,32 @@
             </div>
         </div>
 
-        {{-- <div class="card mt-3">
+        <div class="card mt-3">
             <div class="card-header">Komentar Pengguna</div>
             <div class="card-body">
-                
+                @foreach ($komentar as $k)
+                <div class="card mt-3">
+                    <div class="card-header">{{$k->nama}}</div>
+                    <div class="card-body">
+                        {{ $k->komentar }}
+                    </div>
+                </div>
+                @endforeach
             </div>
-        </div> --}}
+        </div>
 
-        {{-- <div class="card mt-3">
+        <div class="card mt-3">
         <div class="card-header">Add a Review</div>
         <div class="card-body">
-            <form action="{{ route('books.review', ['id' => $book->isbn]) }}" method="POST">
+            <form action="{{ route('buku.komentar', ['idbuku' => $book->idbuku]) }}" method="POST">
                 @csrf
-                <textarea name="review" class="form-control" rows="5" placeholder="Leave a review here" id="floatingTextarea">
-      </textarea>
+                <textarea name="komentar" class="form-control" rows="5" placeholder="Leave a review here" id="floatingTextarea">
+                </textarea>
                 <button class="btn btn-primary mt-3" type="submit" name="submit">Submit</button>
             </form>
         </div>
     </div>
-    </div> --}}
+    </div>
 
     </div>
 @endsection

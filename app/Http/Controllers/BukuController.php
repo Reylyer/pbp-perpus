@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Buku;
 use App\Models\Kategori;
+use App\Models\KomentarBuku;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Redirect;
 
 class BukuController extends Controller
 {
     function list(Request $request)
     {
         $books = DB::select(
-            "SELECT b.isbn as isbn, b.judul as judul, k.nama as nama_kategori, b.pengarang as pengarang, b.penerbit as penerbit, YEAR(b.tgl_insert) as tahun
+            "SELECT b.idbuku as idbuku, b.isbn as isbn, b.judul as judul, k.nama as nama_kategori, b.pengarang as pengarang, b.penerbit as penerbit, YEAR(b.tgl_insert) as tahun
             FROM buku b JOIN kategori k ON b.idkategori = k.idkategori
             WHERE isbn LIKE '%$request->s%'
             OR b.isbn LIKE '%$request->s%'
@@ -22,19 +24,24 @@ class BukuController extends Controller
             ",
         );
 
+
         return view('buku.list', ['books' => $books]);
     }
 
-    function show($isbn)
+    function show($idbuku)
     {
         $book = DB::select(
-            "SELECT b.isbn as isbn, b.judul as judul, k.nama as kategori, b.pengarang as pengarang, b.penerbit as penerbit, b.kota_terbit as kota_terbit, b.editor as editor, b.file_gambar as file_gambar, b.stok as stok, b.stok_tersedia as stok_tersedia, YEAR(b.tgl_insert) as tahun
+            "SELECT b.idbuku as idbuku, b.isbn as isbn, b.judul as judul, k.nama as kategori, b.pengarang as pengarang, b.penerbit as penerbit, b.kota_terbit as kota_terbit, b.editor as editor, b.file_gambar as file_gambar, b.stok as stok, b.stok_tersedia as stok_tersedia, YEAR(b.tgl_insert) as tahun
             FROM buku b JOIN kategori k ON b.idkategori = k.idkategori
-            WHERE b.isbn = ?",
-            [$isbn]
+            WHERE b.idbuku = ?",
+            [$idbuku]
         );
 
-        return view('buku.show', ['book' => $book[0]]);
+        $komentar = KomentarBuku::join('anggota', 'anggota.noktp', '=', 'komentar_buku.noktp')
+                                  ->where('idbuku', '=', "$idbuku")
+                                  ->get();
+
+        return view('buku.show', ['book' => $book[0], 'komentar' => $komentar]);
     }
 
     function search(Request $request)
@@ -77,5 +84,17 @@ class BukuController extends Controller
 
         return redirect()->route('buku.list');
 
+    }
+
+    function komentar(Request $request){
+        $anggota = $request->session()->get('anggota');
+        $komentar = KomentarBuku::create([
+            'idbuku'   => $request->idbuku,
+            'noktp'    => $anggota->noktp,
+            'komentar' => $request->komentar
+        ]);
+        $komentar->save();
+
+        return redirect("/buku/$request->idbuku");
     }
 }

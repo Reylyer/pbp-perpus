@@ -41,8 +41,7 @@ class AnggotaController extends Controller {
     function doLogin(Request $request) {
         $anggota = Anggota::where('email', $request->email)->first();
         if ($anggota && $anggota->password == $request->password) {
-            $user = Auth::User();
-            Session::put('user', $user);
+            Session::put('anggota', $anggota);
             return redirect()->route('buku.list');
         }
         return Redirect::back()->withErrors(['msg' => 'Salah kredensial']);
