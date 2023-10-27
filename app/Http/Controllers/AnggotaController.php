@@ -6,6 +6,9 @@ use App\Models\Anggota;
 use Illuminate\Http\Request;
 use App\Models\Buku;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Validator,Redirect,Response;
 
 
 class AnggotaController extends Controller {
@@ -36,6 +39,12 @@ class AnggotaController extends Controller {
     }
 
     function doLogin(Request $request) {
-        return redirect()->route('buku.list');
+        $anggota = Anggota::where('email', $request->email)->first();
+        if ($anggota && $anggota->password == $request->password) {
+            $user = Auth::User();
+            Session::put('user', $user);
+            return redirect()->route('buku.list');
+        }
+        return Redirect::back()->withErrors(['msg' => 'Salah kredensial']);
     }
 }
