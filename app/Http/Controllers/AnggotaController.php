@@ -42,6 +42,9 @@ class AnggotaController extends Controller {
     function doLogin(Request $request) {
         $anggota = Anggota::where('email', $request->email)->first();
         if ($anggota && $anggota->password == $request->password) {
+            if ($anggota->status == 0) {
+                return Redirect::back()->withErrors(['msg' => 'Akun anda belum diaktifkan']);
+            }
             Session::put('anggota', $anggota);
             return redirect()->route('buku.list');
         }
