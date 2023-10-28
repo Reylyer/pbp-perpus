@@ -108,7 +108,7 @@
         {{-- Comment List --}}
         <div class="card mt-3">
             <div class="card-header">Apa Kata Mereka Dari Buku Ini</div>
-            <div class="card-body d-flex gap-2">
+            <div class="card-body row row-cols-auto gap-2">
                 @foreach ($komentar as $k)
                     <div class="card" style="max-width: 320px">
                         <div class="card-body">
