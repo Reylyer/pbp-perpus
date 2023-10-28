@@ -57,6 +57,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('anggota.riwayat') }}">Riwayat</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('transaksi.peminjaman') }}">Layani peminjaman</a>
+                            </li>
                             <!-- Add more navigation items here as needed -->
                         </ul>
                         @elseif(Auth::guard('anggota')->check())

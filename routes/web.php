@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnggotaController;
+use App\Models\Peminjaman;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Models\Kategori;
@@ -8,6 +9,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\CrudBukuController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\PeminjamanController;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -87,6 +89,8 @@ Route::prefix('anggota')->group(function () {
 //group route for transaksi crud using controller
 Route::prefix('transaksi')->group(function () {
     Route::get('/', [TransaksiController::class, 'list'])->name('transaksi.list');
+    Route::get('/peminjaman', [TransaksiController::class, 'peminjaman'])->name('transaksi.peminjaman');
+    Route::post('/do/pinjam', [TransaksiController::class, 'pinjam'])->name('transaksi.pinjam');
     // Route::get('/show/{idkategori}', [KategoriController::class, 'show'])->name('kategori.show');
     // Route::get('/create', [KategoriController::class, 'create'])->name('kategori.create');
     // Route::get('/edit/{idkategori}', [KategoriController::class, 'edit'])->name('kategori.edit');
