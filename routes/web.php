@@ -21,7 +21,12 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     // redirect to buku list
-    Route::get('/', [BukuController::class, 'list'])->name('buku.list');
+    if(Auth::guard('anggota')->check())
+        return redirect()->route('buku.list');
+    else if(Auth::guard('petugas')->check())
+        return redirect()->route('crudbuku.list');
+    else
+        return redirect()->route('buku.list');
 });
 
 //  url/auth/register
@@ -35,7 +40,7 @@ Route::prefix('/auth')->group(function () {
 });
 
 // group route for kategori crud using controller
-Route::prefix('kategori')->group(function () {
+Route::prefix('kategori')->middleware(['petugas'])->group(function () {
     Route::get('/', [KategoriController::class, 'list'])->name('kategori.list');
     Route::get('/show/{idkategori}', [KategoriController::class, 'show'])->name('kategori.show');
     Route::get('/create', [KategoriController::class, 'create'])->name('kategori.create');
