@@ -94,9 +94,6 @@
                             <a href="{{ route('auth.login') }}" class="btn btn-outline-success"
                                 role="button">Masuk</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link"></a>
-                        </li>
                     @endif
                 </ul>
             </div>

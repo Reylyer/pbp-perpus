@@ -27,7 +27,7 @@ Route::get('/', function () {
     else if (Auth::guard('petugas')->check())
         return redirect()->route('crudbuku.list');
     else
-        return redirect()->route('auth.login');
+        return redirect()->route('buku.list');
 });
 
 //  url/auth/register
