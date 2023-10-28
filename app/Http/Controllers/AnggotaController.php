@@ -23,18 +23,21 @@ class AnggotaController extends Controller {
         return view('anggota.verifikasi', ['data' => $anggota]);
     }
 
-    function riwayat(){
-        // TODO: data yang harus disiapkan:
-        // -	Peminjaman buku yang sudah selesai atau sdh dikembalikan
-        // -	Peminjaman buku yang sedang berlangsung
-        // -	Peminjaman buku yang belum dikembalikan dan telah melebihi tanggal Kembali beserta jumlah denda yang harus dibayarkan.
-        
-        // SELECT all in detail_transaksi if tgl_kembali not null
-        $peminjaman1 = DB::select("SELECT * FROM detail_transaksi LEFT JOIN buku ON detail_transaksi.idbuku = buku.idbuku LEFT JOIN petugas ON detail_transaksi.idpetugas = petugas.idpetugas WHERE tgl_kembali IS NOT NULL");
+    function riwayat() {
+        // SELECT semua jenis peminjaman
+        $peminjamanSelesai = DB::select("SELECT * FROM detail_transaksi WHERE tgl_kembali IS NOT NULL");
+        $peminjamanBerlangsung = DB::select("SELECT * FROM detail_transaksi WHERE tgl_kembali IS NULL");
+        // SELECT peminjaman yang belum dikembalikan dan melebihi tanggal kembali
+        $peminjamanTerlambat = DB::select("SELECT * FROM detail_transaksi WHERE tgl_kembali IS NULL AND CURDATE() > tgl_kembali");
 
-        dd($peminjaman1);
-
+    
+        return view('anggota.riwayat', [
+            'peminjamanSelesai' => $peminjamanSelesai,
+            'peminjamanBerlangsung' => $peminjamanBerlangsung,
+            'peminjamanTerlambat' => $peminjamanTerlambat,
+        ]);
     }
+    
 
     function doVerifikasi($noktp){
         $anggota = DB::select("SELECT * FROM anggota WHERE noktp = ?", [$noktp]);
@@ -90,18 +93,16 @@ class AnggotaController extends Controller {
         }
         
         $credentials = $request->only('email', 'password');
-        if($user_type == 'petugas'){
-            if($user->password == $request->password){
-                Auth::guard('petugas')->login($user);
+        if ($user_type == 'petugas') {
+            if (Auth::guard('petugas')->attempt($credentials)) {
+                return redirect()->route('buku.list');
+            }
+        } else {
+            if (Auth::guard('anggota')->attempt($credentials)) {
                 return redirect()->route('buku.list');
             }
         }
-        else{
-            if($user->password == $request->password){
-                Auth::guard('anggota')->login($user);
-                return redirect()->route('buku.list');
-            }
-        }
+        
         return Redirect::back()->withErrors(['msg' => 'Salah kredensial']);
     }
 
