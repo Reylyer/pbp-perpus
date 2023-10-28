@@ -7,6 +7,7 @@ use App\Models\Kategori;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\CrudBukuController;
+use App\Http\Controllers\TransaksiController;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +22,9 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     // redirect to buku list
-    if(Auth::guard('anggota')->check())
+    if (Auth::guard('anggota')->check())
         return redirect()->route('buku.list');
-    else if(Auth::guard('petugas')->check())
+    else if (Auth::guard('petugas')->check())
         return redirect()->route('crudbuku.list');
     else
         return redirect()->route('auth.login');
@@ -81,4 +82,17 @@ Route::prefix('anggota')->group(function () {
     // url/anggota/verifikasi/1
     Route::get('/verifikasi/{noktp}', [AnggotaController::class, 'doVerifikasi'])->name('verifikasi.doVerifikasi');
     Route::get('/riwayat', [AnggotaController::class, 'riwayat'])->name('anggota.riwayat');
+});
+
+//group route for transaksi crud using controller
+Route::prefix('transaksi')->group(function () {
+    Route::get('/', [TransaksiController::class, 'list'])->name('transaksi.list');
+    // Route::get('/show/{idkategori}', [KategoriController::class, 'show'])->name('kategori.show');
+    // Route::get('/create', [KategoriController::class, 'create'])->name('kategori.create');
+    // Route::get('/edit/{idkategori}', [KategoriController::class, 'edit'])->name('kategori.edit');
+    // Route::get('/update/{idkategori}', [KategoriController::class, 'update'])->name('kategori.update');
+    // // dodelete and doupdate
+    // Route::put('/do/update/{idkategori}', [KategoriController::class, 'doUpdate'])->name('kategori.doUpdate');
+    // Route::delete('/do/delete/{idkategori}', [KategoriController::class, 'doDelete'])->name('kategori.doDelete');
+    // Route::post('/do/create', [KategoriController::class, 'doCreate'])->name('kategori.doCreate');
 });
