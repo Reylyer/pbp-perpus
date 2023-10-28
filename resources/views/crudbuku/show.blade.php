@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="">
         {{-- Book Detail --}}
         <div class="card">
             <div class="card-header">Book Details</div>
@@ -25,7 +25,7 @@
                             <td>{{ $book->pengarang }}</td>
                         </tr>
                         <tr>
-                            <th>Tahun</th>
+                            <th>Tahun terbit</th>
                             <td>{{ $book->tahun }}</td>
                         </tr>
                         <tr>
@@ -70,12 +70,12 @@
             </div>
         @endif
 
-        @auth
+        @if (Auth::guard('anggota')->check())
         {{-- Add Rating --}}
         <div class="card mt-3">
             <div class="card-header">Beri Rating Buku</div>
             <div class="card-body">
-                <form action="{{ route('crudbuku.rating', ['idbuku' => $book->idbuku]) }}" method="POST">
+                <form action="{{ route('buku.rating', ['idbuku' => $book->idbuku]) }}" method="POST">
                     @csrf
                     <div class="input-group">
                         <select class="form-select" id="rating" name="rating">
@@ -96,23 +96,23 @@
         <div class="card mt-3">
             <div class="card-header">Beri Komentar</div>
             <div class="card-body">
-                <form action="{{ route('crudbuku.komentar', ['idbuku' => $book->idbuku]) }}" method="POST">
+                <form action="{{ route('buku.komentar', ['idbuku' => $book->idbuku]) }}" method="POST">
                     @csrf
                     <textarea name="komentar" class="form-control" rows="5" placeholder="" id="floatingTextarea"></textarea>
                     <button class="btn btn-primary mt-3" type="submit" name="submit">Kirim</button>
                 </form>
             </div>
         </div>
-        @endauth
+        @endif
 
         {{-- Comment List --}}
         <div class="card mt-3">
             <div class="card-header">Apa Kata Mereka Dari Buku Ini</div>
-            <div class="card-body d-flex gap-2">
+            <div class="card-body d-flex flex-wrap gap-2">
                 @foreach ($komentar as $k)
-                    <div class="card">
+                    <div class="card" style="max-width: 360px; min-width: 240px">
                         <div class="card-body">
-                            <div class="card-title">{{ $k->nama }}</div>
+                            <div class="card-title fw-bolder">{{ $k->nama }}</div>
                             <div class="card-text">{{ $k->komentar }}</div>
                         </div>
                     </div>
