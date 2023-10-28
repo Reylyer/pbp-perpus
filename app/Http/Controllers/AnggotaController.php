@@ -29,12 +29,14 @@ class AnggotaController extends Controller {
         $peminjamanBerlangsung = DB::select("SELECT * FROM detail_transaksi WHERE tgl_kembali IS NULL");
         // SELECT peminjaman yang belum dikembalikan dan melebihi tanggal kembali
         $peminjamanTerlambat = DB::select("SELECT * FROM detail_transaksi WHERE tgl_kembali IS NULL AND CURDATE() > tgl_kembali");
+        $data = DB::select("SELECT * FROM detail_transaksi WHERE tgl_kembali IS NULL");
 
     
         return view('anggota.riwayat', [
             'peminjamanSelesai' => $peminjamanSelesai,
             'peminjamanBerlangsung' => $peminjamanBerlangsung,
             'peminjamanTerlambat' => $peminjamanTerlambat,
+            'data' => $data
         ]);
     }
     
