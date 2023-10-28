@@ -46,7 +46,7 @@
                                 <a class="nav-link" href="{{ route('kategori.list') }}">Kategori</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('buku.list') }}">Buku</a>
+                                <a class="nav-link" href="{{ route('crudbuku.list') }}">Buku</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('verifikasi.list') }}">Verifikasi Anggota Baru</a>
@@ -56,9 +56,6 @@
                     @elseif(Auth::guard('anggota')->check())
                         <!-- Left Side Of Navbar -->
                         <ul class="navbar-nav mr-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('kategori.list') }}">Kategori</a>
-                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('buku.list') }}">Buku</a>
                             </li>

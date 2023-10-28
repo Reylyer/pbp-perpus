@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Kategori;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BukuController;
-
+use App\Http\Controllers\CrudBukuController;
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,7 +21,12 @@ use App\Http\Controllers\BukuController;
 
 Route::get('/', function () {
     // redirect to buku list
-    return redirect()->route('buku.list');
+    if(Auth::guard('anggota')->check())
+        return redirect()->route('buku.list');
+    else if(Auth::guard('petugas')->check())
+        return redirect()->route('crudbuku.list');
+    else
+        return redirect()->route('auth.login');
 });
 
 //  url/auth/register
@@ -52,6 +58,20 @@ Route::prefix('buku')->group(function () {
     Route::post('/rating/{idbuku}', [BukuController::class, 'rating'])->name('buku.rating');
     Route::get('/{idbuku}', [BukuController::class, 'show'])->name('buku.show');
     Route::post('/do/create', [BukuController::class, 'doCreate'])->name('buku.doCreate');
+});
+
+Route::prefix('crudbuku')->group(function () {
+    Route::get('/', [CrudBukuController::class, 'list'])->name('crudbuku.list');
+    Route::get('/create', [CrudBukuController::class, 'create'])->name('crudbuku.create');
+    Route::post('/komentar/{idbuku}', [CrudBukuController::class, 'komentar'])->name('crudbuku.komentar');
+    Route::post('/rating/{idbuku}', [CrudBukuController::class, 'rating'])->name('crudbuku.rating');
+    Route::get('/{idbuku}', [CrudBukuController::class, 'show'])->name('crudbuku.show');
+    Route::post('/do/create', [CrudBukuController::class, 'doCreate'])->name('crudbuku.doCreate');
+    Route::get('/update/{idbuku}', [CrudBukuController::class, 'update'])->name('crudbuku.update');
+    // dodelete and doupdate
+    Route::put('/do/update/{idbuku}', [CrudBukuController::class, 'doUpdate'])->name('crudbuku.doUpdate');
+    Route::delete('/do/delete/{idbuku}', [CrudBukuController::class, 'doDelete'])->name('crudbuku.doDelete');
+    Route::post('/do/create', [CrudBukuController::class, 'doCreate'])->name('crudbuku.doCreate');
 });
 
 
