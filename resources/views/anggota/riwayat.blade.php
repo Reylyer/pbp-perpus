@@ -6,40 +6,27 @@
     <div class="">
         <div class="card-header d-flex justify-content-between">
         </div>
-        <h2>Verifikasi Pendaftaran Anggota Baru</h2>
-        <a href="{{ route('kategori.create') }}" class="btn btn-primary">Add</a>
+        <h2>Detail Transaksi</h2>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>No</th>
-                    <th>Nama</th>
-                    <th>Alamat</th>
-                    <th>Kota</th>
-                    <th>Email</th>
-                    <th>No Telp</th>
-                    <th>File KTP</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                    <th>ID Transaksi</th>
+                    <th>ID Buku</th>
+                    <th>Denda</th>
+                    <th>Tanggal Kembali</th>
+                    <th>ID Petugas</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($data as $key => $item)
                     <tr>
                         <td>{{ $key+1 }}</td>
-                        <td>{{ $item->nama }}</td>
-                        <td>{{ $item->alamat }}</td>
-                        <td>{{ $item->kota }}</td>
-                        <td>{{ $item->email }}</td>
-                        <td>{{ $item->no_telp }}</td>
-                        <td>{{ $item->file_ktp }}</td>
-                        @if ($item->status == '0')
-                            <td>Belum diverifikasi</td>
-                        @endif
-                        @if ($item->status == '1')
-                            <td>Sudah diverifikasi</td>
-                        @endif
-                        <td><a href="{{ route('verifikasi.doVerifikasi', ['noktp' => $item->noktp]) }}"><button
-                            class="btn btn-primary btn-sm">Verifikasi</button></a></td>
+                        <td>{{ $item->idtransaksi }}</td>
+                        <td>{{ $item->idbuku }}</td>
+                        <td>{{ $item->denda }}</td>
+                        <td>{{ $item->tgl_kembali }}</td>
+                        <td>{{ $item->idpetugas }}</td>
                     </tr>
                 @endforeach
             </tbody>
