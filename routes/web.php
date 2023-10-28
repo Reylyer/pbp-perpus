@@ -54,11 +54,9 @@ Route::prefix('kategori')->middleware(['petugas'])->group(function () {
 
 Route::prefix('buku')->middleware(['anggota'])->group(function () {
     Route::get('/', [BukuController::class, 'list'])->name('buku.list');
-    Route::get('/create', [BukuController::class, 'create'])->name('buku.create');
     Route::post('/komentar/{idbuku}', [BukuController::class, 'komentar'])->name('buku.komentar');
     Route::post('/rating/{idbuku}', [BukuController::class, 'rating'])->name('buku.rating');
     Route::get('/{idbuku}', [BukuController::class, 'show'])->name('buku.show');
-    Route::post('/do/create', [BukuController::class, 'doCreate'])->name('buku.doCreate');
 });
 
 Route::prefix('crudbuku')->middleware(['petugas'])->group(function () {
@@ -77,7 +75,6 @@ Route::prefix('crudbuku')->middleware(['petugas'])->group(function () {
 
 
 // url/anggota/verifikasi
-
 Route::prefix('anggota')->group(function () {
     Route::get('/verifikasi', [AnggotaController::class, 'verifikasi'])->middleware(['petugas'])->name('verifikasi.list');
     // verifikasi anggotan dengan id 1:

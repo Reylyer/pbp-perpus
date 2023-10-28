@@ -76,15 +76,16 @@ class CrudBukuController extends Controller
 
     function doCreate(Request $request){
         $validated = $request->validate([
-            'isbn'        => 'required|string|unique:buku',
-            'judul'       => 'required|string',
-            'idkategori'  => 'required',
-            'pengarang'   => 'required|string',
-            'penerbit'    => 'required|string',
-            'kota_terbit' => 'required|string',
-            'editor'      => 'required|string',
-            'file_gambar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'stok'        => 'nullable|numeric',
+            'isbn'         => 'required|string|unique:buku',
+            'judul'        => 'required|string',
+            'idkategori'   => 'required',
+            'pengarang'    => 'required|string',
+            'penerbit'     => 'required|string',
+            'kota_terbit'  => 'required|string',
+            'tahun_terbit' => 'required|numeric',
+            'editor'       => 'required|string',
+            'file_gambar'  => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'stok'         => 'nullable|numeric',
         ]);
 
         if ($validated['file_gambar'] !== null) {

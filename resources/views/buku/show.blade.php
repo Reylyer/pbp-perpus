@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
+    <div class="">
         {{-- Book Detail --}}
         <div class="card">
             <div class="card-header">Book Details</div>
