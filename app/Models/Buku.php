@@ -4,14 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
 
 class Buku extends Model
 {
     use HasFactory;
-    use Searchable {
-        Searchable::search as parentSearch;
-    }
 
     protected $table = 'buku';
     protected $primaryKey = 'idbuku';
@@ -25,6 +21,7 @@ class Buku extends Model
         'kota_terbit',
         'editor',
         'file_gambar',
+        'tahun_terbit',
         'stok',
         'stok_tersedia',
     ];

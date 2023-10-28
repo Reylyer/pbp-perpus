@@ -13,7 +13,7 @@
         @endif
 
         <h2>Add new book</h2>
-        <form action="{{ route('buku.doCreate') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('crudbuku.doCreate') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="form-group">
@@ -45,10 +45,6 @@
                 <input type="text" class="form-control" id="kota_terbit" name="kota_terbit" required>
             </div>
             <div class="form-group">
-                <label for="tahun_terbit">Tahun terbit:</label>
-                <input type="number" class="form-control" id="tahun_terbit" name="tahun_terbit" required>
-            </div>
-            <div class="form-group">
                 <label for="editor">Editor:</label>
                 <input type="text" class="form-control" id="editor" name="editor" required>
             </div>
@@ -62,7 +58,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Add buku</button>
-            <a href="{{ route('buku.list') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('crudbuku.list') }}" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 @endsection

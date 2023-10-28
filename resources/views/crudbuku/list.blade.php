@@ -4,7 +4,8 @@
     <div class="card">
         <div class="card-header">Books Data</div>
         <div class="card-body">
-            <form action="" class="d-flex" method="GET">
+            <a href="{{ route('crudbuku.create') }}" class="btn btn-primary">+ Add New Book</a>
+            <form action="" class="d-flex mt-3" method="GET">
                 <input id="search" class="form-control me-2" name="s" type="text" placeholder="Search book">
                 <button class="btn btn-outline-primary" type="submit">Search</button>
             </form>
@@ -17,7 +18,7 @@
                         <th>Kategori</th>
                         <th>Pengarang</th>
                         <th>Penerbit</th>
-                        <th>Tahun terbit</th>
+                        <th>Tahun</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -30,8 +31,16 @@
                             <td>{{ $book->pengarang }}</td>
                             <td>{{ $book->penerbit }}</td>
                             <td>{{ $book->tahun }}</td>
-                            <td><a href="{{ route('buku.show', ['idbuku' => $book->idbuku]) }}"><button
-                                        class="btn btn-primary btn-sm">Lihat Detail</button></a></td>
+                            <td>
+                                {{-- fix missing parameter idbuku --}}
+                                <a href="{{ route('crudbuku.show', ['idbuku' => $book->idbuku]) }}" class="btn btn-primary">View</a>
+                                <a href="{{ route('crudbuku.update', ['idbuku' => $book->idbuku]) }}" class="btn btn-success">Edit</a>
+                                <form action="{{ route('crudbuku.doDelete', ['idbuku' => $book->idbuku]) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

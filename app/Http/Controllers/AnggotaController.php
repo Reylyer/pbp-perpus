@@ -93,9 +93,10 @@ class AnggotaController extends Controller {
         }
         
         $credentials = $request->only('email', 'password');
-        if ($user_type == 'petugas') {
-            if (Auth::guard('petugas')->attempt($credentials)) {
-                return redirect()->route('buku.list');
+        if($user_type == 'petugas'){
+            if($user->password == $request->password){
+                Auth::guard('petugas')->login($user);
+                return redirect()->route('crudbuku.list');
             }
         } else {
             if (Auth::guard('anggota')->attempt($credentials)) {
