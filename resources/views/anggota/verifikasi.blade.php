@@ -29,7 +29,10 @@
                             <td>{{ $item->kota }}</td>
                             <td>{{ $item->email }}</td>
                             <td>{{ $item->no_telp }}</td>
-                            <td>{{ $item->file_ktp }}</td>
+                            <td>
+                                <img src="{{ asset('storage/images/' . $item->file_ktp) }}" class="img-fluid w-25"
+                                alt={{ $item->file_ktp }}>
+                            </td>
                             @if ($item->status == '0')
                                 <td>Belum diverifikasi</td>
                             @endif

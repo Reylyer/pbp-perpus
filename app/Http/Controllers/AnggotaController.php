@@ -81,7 +81,13 @@ class AnggotaController extends Controller {
             'file_ktp'    => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $validated['file_ktp'] = Storage::disk('public')->put('images', $validated['file_ktp']);
+        if ($validated['file_ktp'] !== null) {
+            $save_path = Storage::disk('local')->put('public/images', $validated['file_ktp']);
+            $parts = explode('/', $save_path);
+            $validated['file_ktp'] = end($parts);
+            error_log($validated['file_ktp']);
+        }
+
         $anggota = Anggota::create($validated);
         error_log($anggota);
         $anggota->save();
