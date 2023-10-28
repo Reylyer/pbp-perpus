@@ -70,7 +70,7 @@
             </div>
         @endif
 
-        @auth
+        @if (Auth::guard('anggota')->check())
         {{-- Add Rating --}}
         <div class="card mt-3">
             <div class="card-header">Beri Rating Buku</div>
@@ -103,7 +103,7 @@
                 </form>
             </div>
         </div>
-        @endauth
+        @endif
 
         {{-- Comment List --}}
         <div class="card mt-3">

@@ -4,8 +4,7 @@
     <div class="card">
         <div class="card-header">Books Data</div>
         <div class="card-body">
-            <a href="{{ route('buku.create') }}" class="btn btn-primary">+ Add New Book</a>
-            <form action="" class="d-flex mt-3" method="GET">
+            <form action="" class="d-flex" method="GET">
                 <input id="search" class="form-control me-2" name="s" type="text" placeholder="Search book">
                 <button class="btn btn-outline-primary" type="submit">Search</button>
             </form>
