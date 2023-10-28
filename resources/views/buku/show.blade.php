@@ -110,9 +110,9 @@
             <div class="card-header">Apa Kata Mereka Dari Buku Ini</div>
             <div class="card-body d-flex gap-2">
                 @foreach ($komentar as $k)
-                    <div class="card">
+                    <div class="card" style="max-width: 320px">
                         <div class="card-body">
-                            <div class="card-title">{{ $k->nama }}</div>
+                            <div class="card-title fw-bolder">{{ $k->nama }}</div>
                             <div class="card-text">{{ $k->komentar }}</div>
                         </div>
                     </div>
