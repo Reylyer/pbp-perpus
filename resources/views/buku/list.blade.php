@@ -18,7 +18,7 @@
                         <th>Kategori</th>
                         <th>Pengarang</th>
                         <th>Penerbit</th>
-                        <th>Tahun</th>
+                        <th>Tahun terbit</th>
                         <th>Actions</th>
                     </tr>
                 </thead>

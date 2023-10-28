@@ -25,7 +25,7 @@
                             <td>{{ $book->pengarang }}</td>
                         </tr>
                         <tr>
-                            <th>Tahun</th>
+                            <th>Tahun terbit</th>
                             <td>{{ $book->tahun }}</td>
                         </tr>
                         <tr>

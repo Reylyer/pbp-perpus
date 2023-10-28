@@ -16,13 +16,23 @@ class BukuController extends Controller
     function list(Request $request)
     {
         $books = DB::select(
-            "SELECT b.idbuku as idbuku, b.isbn as isbn, b.judul as judul, k.nama as nama_kategori, b.pengarang as pengarang, b.penerbit as penerbit, YEAR(b.tgl_insert) as tahun
-            FROM buku b JOIN kategori k ON b.idkategori = k.idkategori
+            "SELECT
+                b.idbuku as idbuku,
+                b.isbn as isbn,
+                b.judul as judul,
+                k.nama as nama_kategori,
+                b.pengarang as pengarang,
+                b.penerbit as penerbit,
+                b.tahun_terbit as tahun
+            FROM buku b
+            JOIN kategori k
+            ON b.idkategori = k.idkategori
             WHERE isbn LIKE '%$request->s%'
             OR b.isbn LIKE '%$request->s%'
             OR k.nama LIKE '%$request->s%'
             OR b.pengarang LIKE '%$request->s%'
             OR b.penerbit LIKE '%$request->s%'
+            OR b.tahun_terbit LIKE '%$request->s%'
             ",
         );
 
@@ -44,8 +54,10 @@ class BukuController extends Controller
                     b.file_gambar as file_gambar,
                     b.stok as stok,
                     b.stok_tersedia as stok_tersedia,
-                    YEAR(b.tgl_insert) as tahun
-            FROM buku b JOIN kategori k ON b.idkategori = k.idkategori
+                    b.tahun_terbit as tahun
+            FROM buku b
+            JOIN kategori k
+            ON b.idkategori = k.idkategori
             WHERE b.idbuku = ?",
             [$idbuku]
         );
@@ -58,7 +70,7 @@ class BukuController extends Controller
                               FROM rating_buku
                               WHERE idbuku = '$idbuku'
                               ");
-        
+
         $rating = $rating ? number_format($rating[0]->rating, 1) : null;
 
         return view('buku.show', ['book' => $book[0], 'komentar' => $komentar, 'rating' => $rating]);
@@ -76,19 +88,22 @@ class BukuController extends Controller
 
     function doCreate(Request $request){
         $validated = $request->validate([
-            'isbn'        => 'required|string|unique:buku',
-            'judul'       => 'required|string',
-            'idkategori'  => 'required',
-            'pengarang'   => 'required|string',
-            'penerbit'    => 'required|string',
-            'kota_terbit' => 'required|string',
-            'editor'      => 'required|string',
-            'file_gambar' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'stok'        => 'nullable|numeric',
+            'isbn'         => 'required|string|unique:buku',
+            'judul'        => 'required|string',
+            'idkategori'   => 'required',
+            'pengarang'    => 'required|string',
+            'penerbit'     => 'required|string',
+            'kota_terbit'  => 'required|string',
+            'tahun_terbit' => 'required|numeric',
+            'editor'       => 'required|string',
+            'file_gambar'  => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'stok'         => 'nullable|numeric',
         ]);
 
         if ($validated['file_gambar'] !== null) {
-            $validated['file_gambar'] = Storage::disk('public')->put('images', $validated['file_gambar']);
+            $save_path = Storage::disk('local')->put('public/images', $validated['file_gambar']);
+            $parts = explode('/', $save_path);
+            $validated['file_gambar'] = end($parts);
             error_log($validated['file_gambar']);
         }
 

@@ -25,6 +25,7 @@ class Buku extends Model
         'kota_terbit',
         'editor',
         'file_gambar',
+        'tahun_terbit',
         'stok',
         'stok_tersedia',
     ];
