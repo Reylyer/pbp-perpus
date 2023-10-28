@@ -15,6 +15,36 @@ use Illuminate\Support\Facades\Validator;
 
 
 class AnggotaController extends Controller {
+
+    function verifikasi(){
+        $anggota = DB::select("SELECT * FROM anggota WHERE status = 0");
+        // dd($anggota);
+        return view('anggota.verifikasi', ['data' => $anggota]);
+    }
+
+    function riwayat(){
+        // TODO: data yang harus disiapkan:
+        // -	Peminjaman buku yang sudah selesai atau sdh dikembalikan
+        // -	Peminjaman buku yang sedang berlangsung
+        // -	Peminjaman buku yang belum dikembalikan dan telah melebihi tanggal Kembali beserta jumlah denda yang harus dibayarkan.
+        
+        // SELECT all in detail_transaksi if tgl_kembali not null
+        $peminjaman1 = DB::select("SELECT * FROM detail_transaksi LEFT JOIN buku ON detail_transaksi.idbuku = buku.idbuku LEFT JOIN petugas ON detail_transaksi.idpetugas = petugas.idpetugas WHERE tgl_kembali IS NOT NULL");
+
+        dd($peminjaman1);
+
+    }
+
+    function doVerifikasi($noktp){
+        $anggota = DB::select("SELECT * FROM anggota WHERE noktp = ?", [$noktp]);
+        if($anggota){
+            $query = DB::update("UPDATE anggota SET status = 1 WHERE noktp = ?", [$noktp]);
+            return redirect()->route('verifikasi.list');
+        } else {
+            return redirect()->route('verifikasi.list');
+        }
+    }
+    // url/auth/register
     function register() {
         return view('register');
     }

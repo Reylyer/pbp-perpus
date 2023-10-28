@@ -64,6 +64,14 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+        'managers'  => [
+            'driver' => 'eloquent',
+            'model'  => App\Anggota::class,
+        ],
+        'admins'  => [
+            'driver' => 'eloquent',
+            'model'  => App\Admin::class,
+        ]
 
         // 'users' => [
         //     'driver' => 'database',

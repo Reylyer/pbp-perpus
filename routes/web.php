@@ -23,6 +23,7 @@ Route::get('/', function () {
     return redirect()->route('buku.list');
 });
 
+//  url/auth/register
 Route::prefix('/auth')-> group(function () {
     Route::get('/register', [AnggotaController::class, 'register'])->name('auth.register');
     Route::get('/login', [AnggotaController::class, 'login'])->name('auth.login');
@@ -50,4 +51,15 @@ Route::prefix('buku')->group(function () {
     Route::post('/rating/{idbuku}', [BukuController::class, 'rating'])->name('buku.rating');
     Route::get('/{idbuku}', [BukuController::class, 'show'])->name('buku.show');
     Route::post('/do/create', [BukuController::class, 'doCreate'])->name('buku.doCreate');
+});
+
+
+// url/anggota/verifikasi
+
+Route::prefix('anggota')->group(function () {
+    Route::get('/verifikasi', [AnggotaController::class, 'verifikasi'])->name('verifikasi.list');
+    // verifikasi anggotan dengan id 1:
+    // url/anggota/verifikasi/1
+    Route::get('/verifikasi/{noktp}', [AnggotaController::class, 'doVerifikasi'])->name('verifikasi.doVerifikasi');
+    Route::get('/riwayat', [AnggotaController::class, 'riwayat'])->name('anggota.riwayat');
 });
