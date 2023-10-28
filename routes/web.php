@@ -21,12 +21,7 @@ use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     // redirect to buku list
-    if(Auth::guard('anggota')->check())
-        return redirect()->route('buku.list');
-    else if(Auth::guard('petugas')->check())
-        return redirect()->route('crudbuku.list');
-    else
-        return redirect()->route('auth.login');
+    Route::get('/', [BukuController::class, 'list'])->name('buku.list');
 });
 
 //  url/auth/register
