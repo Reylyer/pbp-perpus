@@ -88,7 +88,9 @@ class CrudBukuController extends Controller
         ]);
 
         if ($validated['file_gambar'] !== null) {
-            $validated['file_gambar'] = Storage::disk('public')->put('images', $validated['file_gambar']);
+            $save_path = Storage::disk('local')->put('public/images', $validated['file_gambar']);
+            $parts = explode('/', $save_path);
+            $validated['file_gambar'] = end($parts);
             error_log($validated['file_gambar']);
         }
 
