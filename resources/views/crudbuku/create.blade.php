@@ -45,6 +45,10 @@
                 <input type="text" class="form-control" id="kota_terbit" name="kota_terbit" required>
             </div>
             <div class="form-group">
+                <label for="tahun_terbit">Tahun terbit:</label>
+                <input type="number" class="form-control" id="tahun_terbit" name="tahun_terbit" required>
+            </div>
+            <div class="form-group">
                 <label for="editor">Editor:</label>
                 <input type="text" class="form-control" id="editor" name="editor" required>
             </div>
