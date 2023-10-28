@@ -52,14 +52,14 @@ Route::prefix('kategori')->middleware(['petugas'])->group(function () {
     Route::post('/do/create', [KategoriController::class, 'doCreate'])->name('kategori.doCreate');
 });
 
-Route::prefix('buku')->middleware(['anggota'])->group(function () {
+Route::prefix('buku')->group(function () {
     Route::get('/', [BukuController::class, 'list'])->name('buku.list');
     Route::post('/komentar/{idbuku}', [BukuController::class, 'komentar'])->name('buku.komentar');
     Route::post('/rating/{idbuku}', [BukuController::class, 'rating'])->name('buku.rating');
     Route::get('/{idbuku}', [BukuController::class, 'show'])->name('buku.show');
 });
 
-Route::prefix('crudbuku')->middleware(['petugas'])->group(function () {
+Route::prefix('crudbuku')->group(function () {
     Route::get('/', [CrudBukuController::class, 'list'])->name('crudbuku.list');
     Route::get('/create', [CrudBukuController::class, 'create'])->name('crudbuku.create');
     Route::post('/komentar/{idbuku}', [CrudBukuController::class, 'komentar'])->name('crudbuku.komentar');
@@ -76,9 +76,9 @@ Route::prefix('crudbuku')->middleware(['petugas'])->group(function () {
 
 // url/anggota/verifikasi
 Route::prefix('anggota')->group(function () {
-    Route::get('/verifikasi', [AnggotaController::class, 'verifikasi'])->middleware(['petugas'])->name('verifikasi.list');
+    Route::get('/verifikasi', [AnggotaController::class, 'verifikasi'])->name('verifikasi.list');
     // verifikasi anggotan dengan id 1:
     // url/anggota/verifikasi/1
-    Route::get('/verifikasi/{noktp}', [AnggotaController::class, 'doVerifikasi'])->middleware(['petugas'])->name('verifikasi.doVerifikasi');
+    Route::get('/verifikasi/{noktp}', [AnggotaController::class, 'doVerifikasi'])->name('verifikasi.doVerifikasi');
     Route::get('/riwayat', [AnggotaController::class, 'riwayat'])->name('anggota.riwayat');
 });
