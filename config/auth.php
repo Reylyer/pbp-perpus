@@ -40,6 +40,14 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'anggota' => [
+            'driver' => 'session',
+            'provider' => 'anggota',
+        ],
+        'petugas' => [
+            'driver' => 'session',
+            'provider' => 'petugas',
+        ],
     ],
 
     /*
@@ -64,13 +72,13 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-        'managers'  => [
+        'anggota'  => [
             'driver' => 'eloquent',
-            'model'  => App\Anggota::class,
+            'model'  => App\Models\Anggota::class,
         ],
-        'admins'  => [
+        'petugas'  => [
             'driver' => 'eloquent',
-            'model'  => App\Admin::class,
+            'model'  => App\Models\Petugas::class,
         ]
 
         // 'users' => [

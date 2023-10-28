@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Anggota;
 use Illuminate\Http\Request;
 use App\Models\Buku;
+use App\Models\Petugas;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -73,14 +74,40 @@ class AnggotaController extends Controller {
     }
 
     function doLogin(Request $request) {
-        $anggota = Anggota::where('email', $request->email)->first();
-        if ($anggota && $anggota->password == $request->password) {
-            if ($anggota->status == 0) {
+        $user = Anggota::where('email', $request->email)->first();
+        $user_type = 'anggota';
+        if($user){
+            if ($user->status == 0) {
                 return Redirect::back()->withErrors(['msg' => 'Akun anda belum diaktifkan']);
             }
-            Session::put('anggota', $anggota);
-            return redirect()->route('buku.list');
+        }
+        else if(!$user){
+            $user_type = 'petugas';
+            $user = Petugas::where('email', $request->email)->first();
+            if(!$user){
+                return Redirect::back()->withErrors(['msg' => 'Akun tidak ditemukan']);
+            }
+        }
+        
+        $credentials = $request->only('email', 'password');
+        if($user_type == 'petugas'){
+            if($user->password == $request->password){
+                Auth::guard('petugas')->login($user);
+                return redirect()->route('buku.list');
+            }
+        }
+        else{
+            if($user->password == $request->password){
+                Auth::guard('anggota')->login($user);
+                return redirect()->route('buku.list');
+            }
         }
         return Redirect::back()->withErrors(['msg' => 'Salah kredensial']);
+    }
+
+    function doLogout(Request $request) {
+        Auth::guard('anggota')->logout();
+        Auth::guard('petugas')->logout();
+        return redirect()->route('auth.login');
     }
 }

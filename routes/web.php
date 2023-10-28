@@ -29,6 +29,7 @@ Route::prefix('/auth')-> group(function () {
     Route::get('/login', [AnggotaController::class, 'login'])->name('auth.login');
     Route::post('/register', [AnggotaController::class, 'doRegister'])->name('auth.doRegister');
     Route::post('/login', [AnggotaController::class, 'doLogin'])->name('auth.doLogin');
+    Route::get('/logout', [AnggotaController::class, 'doLogout'])->name('auth.doLogout');
 });
 
 // group route for kategori crud using controller
