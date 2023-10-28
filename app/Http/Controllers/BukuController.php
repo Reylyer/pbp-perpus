@@ -29,7 +29,7 @@ class BukuController extends Controller
             JOIN kategori k
             ON b.idkategori = k.idkategori
             WHERE isbn LIKE '%$request->s%'
-            OR b.isbn LIKE '%$request->s%'
+            OR b.judul LIKE '%$request->s%'
             OR k.nama LIKE '%$request->s%'
             OR b.pengarang LIKE '%$request->s%'
             OR b.penerbit LIKE '%$request->s%'
