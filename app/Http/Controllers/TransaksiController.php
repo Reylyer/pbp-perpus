@@ -44,7 +44,7 @@ class TransaksiController extends Controller
     function pinjam(Request $request) {
         $petugas = Auth::guard('petugas')->user();
 
-        $validated = $request->validate([
+        $request->validate([
             'noktp'       => 'required',
             'idbuku'      => 'required'
         ]);
@@ -53,17 +53,23 @@ class TransaksiController extends Controller
         $masih_dipinjam = Peminjaman::leftJoin('detail_transaksi', 'peminjaman.idtransaksi',
                                                               '=', 'detail_transaksi.idtransaksi')
                                     ->where([
-                                        ['detail_transaksi.tgl_kembali', '!=', null],
+                                        ['detail_transaksi.tgl_kembali', '=', null],
                                         ['peminjaman.noktp', '=', $request->noktp]
                                     ])->get();
 
         $buku_in_question = Buku::find($request->idbuku);
 
+        error_log($masih_dipinjam->count());
         if ($masih_dipinjam->count() >= 2) {
             error_log("2 peminjaman");
-
-            // $yang_dipinjam = implode(' dan ', $buku_in_question->judul);
-            return Redirect::back()->withErrors(['msg' => "User ini sudah meminjam 2. Silahkan mengembalikan buku yang sudah dipinjam terlebih dahulu"]);
+            $buku = Buku::whereIn('idbuku', $masih_dipinjam->pluck('idbuku')->toArray())->pluck('judul')->toArray();
+            $yang_dipinjam = implode(' dan ', $buku);
+            return Redirect::back()->withErrors(['msg' => "User ini sudah meminjam 2 yakni, $yang_dipinjam. Silahkan mengembalikan buku yang sudah dipinjam terlebih dahulu"]);
+        } else if ($masih_dipinjam->count() == 1) {
+            if ($masih_dipinjam->first()->idbuku == $buku_in_question->idbuku) {
+                $judul = $buku_in_question->judul;
+                return Redirect::back()->withErrors(['msg' => "User ini sudah meminjam $judul. Silahkan mengembalikan buku yang sudah dipinjam terlebih dahulu"]);
+            }
         }
 
         error_log($buku_in_question->judul);
@@ -87,6 +93,6 @@ class TransaksiController extends Controller
         $peminjaman->save();
         $transaksi->save();
 
-        return redirect('/transaksi/peminjaman');
+        return redirect('/anggota/riwayat');
     }
 }
