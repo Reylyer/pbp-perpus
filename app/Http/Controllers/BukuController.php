@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
+use Auth;
 
 class BukuController extends Controller
 {
@@ -121,7 +122,7 @@ class BukuController extends Controller
     }
 
     function komentar(Request $request, $idbuku){
-        $anggota = $request->session()->get('anggota');
+        $anggota = Auth::guard('anggota')->user();
 
         if ($request->input('komentar') !== null) {
             $komentar = KomentarBuku::create([
@@ -136,7 +137,7 @@ class BukuController extends Controller
     }
 
     function rating(Request $request, $idbuku){
-        $anggota = $request->session()->get('anggota');
+        $anggota = Auth::guard('anggota')->user();
 
         $isAlreadyRated = DB::select("SELECT * FROM rating_buku WHERE idbuku = '$idbuku' AND noktp = '$anggota->noktp'");
 
