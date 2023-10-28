@@ -41,7 +41,7 @@ Route::prefix('/auth')->group(function () {
 });
 
 // group route for kategori crud using controller
-Route::prefix('kategori')->middleware(['petugas'])->group(function () {
+Route::prefix('kategori')->group(function () {
     Route::get('/', [KategoriController::class, 'list'])->name('kategori.list');
     Route::get('/show/{idkategori}', [KategoriController::class, 'show'])->name('kategori.show');
     Route::get('/create', [KategoriController::class, 'create'])->name('kategori.create');
