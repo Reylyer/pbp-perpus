@@ -25,7 +25,7 @@
                             <td>{{ $book->pengarang }}</td>
                         </tr>
                         <tr>
-                            <th>Tahun terbit</th>
+                            <th>Tahun</th>
                             <td>{{ $book->tahun }}</td>
                         </tr>
                         <tr>
@@ -70,12 +70,12 @@
             </div>
         @endif
 
-        @if (Auth::guard('anggota')->check())
+        @auth
         {{-- Add Rating --}}
         <div class="card mt-3">
             <div class="card-header">Beri Rating Buku</div>
             <div class="card-body">
-                <form action="{{ route('buku.rating', ['idbuku' => $book->idbuku]) }}" method="POST">
+                <form action="{{ route('crudbuku.rating', ['idbuku' => $book->idbuku]) }}" method="POST">
                     @csrf
                     <div class="input-group">
                         <select class="form-select" id="rating" name="rating">
@@ -96,14 +96,14 @@
         <div class="card mt-3">
             <div class="card-header">Beri Komentar</div>
             <div class="card-body">
-                <form action="{{ route('buku.komentar', ['idbuku' => $book->idbuku]) }}" method="POST">
+                <form action="{{ route('crudbuku.komentar', ['idbuku' => $book->idbuku]) }}" method="POST">
                     @csrf
                     <textarea name="komentar" class="form-control" rows="5" placeholder="" id="floatingTextarea"></textarea>
                     <button class="btn btn-primary mt-3" type="submit" name="submit">Kirim</button>
                 </form>
             </div>
         </div>
-        @endif
+        @endauth
 
         {{-- Comment List --}}
         <div class="card mt-3">
