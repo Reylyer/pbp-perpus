@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('anggota', function (Blueprint $table) {
+        Schema::table('buku', function (Blueprint $table) {
             $table->year('tahun_terbit')->default(0);
         });
     }
@@ -25,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('buku', function (Blueprint $table) {
+            $table->dropColumn('tahun_terbit');
+        });
     }
 };
