@@ -16,13 +16,23 @@ class CrudBukuController extends Controller
     function list(Request $request)
     {
         $books = DB::select(
-            "SELECT b.idbuku as idbuku, b.isbn as isbn, b.judul as judul, k.nama as nama_kategori, b.pengarang as pengarang, b.penerbit as penerbit, YEAR(b.tgl_insert) as tahun
-            FROM buku b JOIN kategori k ON b.idkategori = k.idkategori
+            "SELECT
+                b.idbuku as idbuku,
+                b.isbn as isbn,
+                b.judul as judul,
+                k.nama as nama_kategori,
+                b.pengarang as pengarang,
+                b.penerbit as penerbit,
+                b.tahun_terbit as tahun
+            FROM buku b
+            JOIN kategori k
+            ON b.idkategori = k.idkategori
             WHERE isbn LIKE '%$request->s%'
             OR b.isbn LIKE '%$request->s%'
             OR k.nama LIKE '%$request->s%'
             OR b.pengarang LIKE '%$request->s%'
             OR b.penerbit LIKE '%$request->s%'
+            OR b.tahun_terbit LIKE '%$request->s%'
             ",
         );
 
@@ -44,8 +54,10 @@ class CrudBukuController extends Controller
                     b.file_gambar as file_gambar,
                     b.stok as stok,
                     b.stok_tersedia as stok_tersedia,
-                    YEAR(b.tgl_insert) as tahun
-            FROM buku b JOIN kategori k ON b.idkategori = k.idkategori
+                    b.tahun_terbit as tahun
+            FROM buku b
+            JOIN kategori k
+            ON b.idkategori = k.idkategori
             WHERE b.idbuku = ?",
             [$idbuku]
         );
@@ -58,7 +70,7 @@ class CrudBukuController extends Controller
                               FROM rating_buku
                               WHERE idbuku = '$idbuku'
                               ");
-        
+
         $rating = $rating ? number_format($rating[0]->rating, 1) : null;
 
         return view('crudbuku.show', ['book' => $book[0], 'komentar' => $komentar, 'rating' => $rating]);
