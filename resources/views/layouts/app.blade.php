@@ -13,6 +13,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -37,45 +39,65 @@
                 </button>
 
                 <div class="collapse navbar-collapse d=flex justify-content-between" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('kategori.list') }}">Kategori</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('buku.list') }}">Buku</a>
-                        </li>
-                        <!-- Add more navigation items here as needed -->
-                    </ul>
+                    @if(Auth::guard('petugas')->check())
+                        <!-- Left Side Of Navbar -->
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('kategori.list') }}">Kategori</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('buku.list') }}">Buku</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('verifikasi.list') }}">Verifikasi Anggota Baru</a>
+                            </li>
+                            <!-- Add more navigation items here as needed -->
+                        </ul>
+                    @elseif(Auth::guard('anggota')->check())
+                        <!-- Left Side Of Navbar -->
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('kategori.list') }}">Kategori</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('buku.list') }}">Buku</a>
+                            </li>
+                            <!-- Add more navigation items here as needed -->
+                        </ul>
+                    @endif
+                    
+                    
+
+                    
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
-                        @guest
-                        <li class="nav-item">
-                            <a href="{{ route('auth.login') }}" class="btn btn-outline-success" role="button">Masuk</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link"></a>
-                        </li>
-                        @else
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name }}
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
+                        @if(Auth::guard('petugas')->check() || Auth::guard('anggota')->check())
+                            <div class="dropdown">
+                                {{-- <a id="navbarDropdown" class="nav-link dropdown-toggle" data-toggle="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Auth::guard('anggota')->user()->email ?? Auth::guard('petugas')->user()->email  }}
+                                </a> --}}
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ Auth::guard('anggota')->user()->email ?? Auth::guard('petugas')->user()->email  }}
                                 </a>
+                                
 
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                    {{-- <form id="logout-form" action="{{ route('auth.doLogout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form> --}}
+                                    <a class="dropdown-item" href="{{ route('auth.doLogout') }}">{{ __('Logout') }}</a>
+                                </div>
                             </div>
-                        </li>
-                        @endguest
+                        @else
+                            <li class="nav-item">
+                                <a href="{{ route('auth.login') }}" class="btn btn-outline-success" role="button">Masuk</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link"></a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
             </div>
