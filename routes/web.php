@@ -30,7 +30,8 @@ Route::get('/', function () {
 });
 
 //  url/auth/register
-Route::prefix('/auth')-> group(function () {
+// add guard middleware
+Route::prefix('/auth')->group(function () {
     Route::get('/register', [AnggotaController::class, 'register'])->name('auth.register');
     Route::get('/login', [AnggotaController::class, 'login'])->name('auth.login');
     Route::post('/register', [AnggotaController::class, 'doRegister'])->name('auth.doRegister');
@@ -39,7 +40,7 @@ Route::prefix('/auth')-> group(function () {
 });
 
 // group route for kategori crud using controller
-Route::prefix('kategori')->group(function () {
+Route::prefix('kategori')->middleware(['petugas'])->group(function () {
     Route::get('/', [KategoriController::class, 'list'])->name('kategori.list');
     Route::get('/show/{idkategori}', [KategoriController::class, 'show'])->name('kategori.show');
     Route::get('/create', [KategoriController::class, 'create'])->name('kategori.create');
@@ -51,7 +52,7 @@ Route::prefix('kategori')->group(function () {
     Route::post('/do/create', [KategoriController::class, 'doCreate'])->name('kategori.doCreate');
 });
 
-Route::prefix('buku')->group(function () {
+Route::prefix('buku')->middleware(['anggota'])->group(function () {
     Route::get('/', [BukuController::class, 'list'])->name('buku.list');
     Route::get('/create', [BukuController::class, 'create'])->name('buku.create');
     Route::post('/komentar/{idbuku}', [BukuController::class, 'komentar'])->name('buku.komentar');
@@ -60,7 +61,7 @@ Route::prefix('buku')->group(function () {
     Route::post('/do/create', [BukuController::class, 'doCreate'])->name('buku.doCreate');
 });
 
-Route::prefix('crudbuku')->group(function () {
+Route::prefix('crudbuku')->middleware(['petugas'])->group(function () {
     Route::get('/', [CrudBukuController::class, 'list'])->name('crudbuku.list');
     Route::get('/create', [CrudBukuController::class, 'create'])->name('crudbuku.create');
     Route::post('/komentar/{idbuku}', [CrudBukuController::class, 'komentar'])->name('crudbuku.komentar');
@@ -78,9 +79,9 @@ Route::prefix('crudbuku')->group(function () {
 // url/anggota/verifikasi
 
 Route::prefix('anggota')->group(function () {
-    Route::get('/verifikasi', [AnggotaController::class, 'verifikasi'])->name('verifikasi.list');
+    Route::get('/verifikasi', [AnggotaController::class, 'verifikasi'])->middleware(['petugas'])->name('verifikasi.list');
     // verifikasi anggotan dengan id 1:
     // url/anggota/verifikasi/1
-    Route::get('/verifikasi/{noktp}', [AnggotaController::class, 'doVerifikasi'])->name('verifikasi.doVerifikasi');
+    Route::get('/verifikasi/{noktp}', [AnggotaController::class, 'doVerifikasi'])->middleware(['petugas'])->name('verifikasi.doVerifikasi');
     Route::get('/riwayat', [AnggotaController::class, 'riwayat'])->name('anggota.riwayat');
 });
