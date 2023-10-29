@@ -9,7 +9,9 @@ class Transaksi extends Model
 {
     use HasFactory;
     protected $table = 'detail_transaksi';
-    protected $primaryKey = null;
+
+    //cursed (to use ::find)
+    protected $primaryKey = 'idtransaksi';
     public $incrementing = false;
 
     protected $fillable = [
@@ -20,15 +22,15 @@ class Transaksi extends Model
     ];
 
     public function petugas() {
-        return $this->belongsTo('idpetugas');
+        return $this->belongsTo(Petugas::class, 'idpetugas');
     }
 
     public function transaksi() {
-        return $this->belongsTo('idtransaksi');
+        return $this->belongsTo(Transaksi::class, 'idtransaksi');
     }
 
     public function buku() {
-        return $this->belongsTo('idbuku');
+        return $this->belongsTo(Buku::class, 'idbuku');
     }
 
     public $timestamps = false;

@@ -91,6 +91,8 @@ Route::prefix('transaksi')->group(function () {
     Route::get('/', [TransaksiController::class, 'list'])->name('transaksi.list');
     Route::get('/peminjaman', [TransaksiController::class, 'peminjaman'])->name('transaksi.peminjaman');
     Route::post('/do/pinjam', [TransaksiController::class, 'pinjam'])->name('transaksi.pinjam');
+    Route::get('/pengembalian', [TransaksiController::class, 'pengembalian'])->name('transaksi.pengembalian');
+    Route::get('/do/mengembalikan', [TransaksiController::class, 'mengembalikan'])->name('transaksi.mengembalikan');
     // Route::get('/show/{idkategori}', [KategoriController::class, 'show'])->name('kategori.show');
     // Route::get('/create', [KategoriController::class, 'create'])->name('kategori.create');
     // Route::get('/edit/{idkategori}', [KategoriController::class, 'edit'])->name('kategori.edit');

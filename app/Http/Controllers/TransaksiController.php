@@ -95,4 +95,40 @@ class TransaksiController extends Controller
 
         return redirect('/anggota/riwayat');
     }
+
+    function pengembalian(Request $request) {
+        $peminjaman = DB::select(
+                "SELECT
+                    dt.idtransaksi,
+                    a.noktp,
+                    a.nama as nama_peminjam,
+                    b.judul,
+                    b.isbn,
+                    p.tgl_pinjam,
+                    pt.nama as nama_petugas,
+                CASE
+                    WHEN NOW() < dt.tgl_kembali THEN 0
+                    ELSE TIMESTAMPDIFF(DAY, p.tgl_pinjam, NOW()) * 1000
+                END AS denda
+                FROM detail_transaksi dt
+                LEFT JOIN buku b ON dt.idbuku = b.idbuku
+                LEFT JOIN peminjaman p ON dt.idtransaksi = p.idtransaksi
+                LEFT JOIN anggota a ON p.noktp = a.noktp
+                LEFT JOIN petugas pt ON p.idpetugas = pt.idpetugas
+                WHERE
+                    dt.tgl_kembali IS NULL
+                ");
+
+        return view('transaksi.pengembalian',
+                     ['peminjaman' => $peminjaman]);
+    }
+
+    function mengembalikan(Request $request) {
+        $petugas = Auth::guard('petugas')->user();
+        Transaksi::where("idtransaksi", $request->idtransaksi)
+                 ->update(["denda" => $request->denda,
+                           "tgl_kembali" => now(),
+                           "idpetugas" => $petugas->idpetugas]);
+        return redirect('/transaksi/pengembalian');
+    }
 }

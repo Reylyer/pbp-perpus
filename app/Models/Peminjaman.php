@@ -18,7 +18,7 @@ class Peminjaman extends Model
     ];
 
     public function transaksi() {
-        return $this->hasMany('idtransaksi');
+        return $this->hasMany(Transaksi::class, 'idtransaksi');
     }
 
     const CREATED_AT = 'tgl_pinjam';
