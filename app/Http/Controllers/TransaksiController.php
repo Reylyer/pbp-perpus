@@ -117,6 +117,9 @@ class TransaksiController extends Controller
             return Redirect::back()->withErrors(['msg' => "$judul_buku kehabisan stok"]);
         }
 
+        Buku::where("idbuku", $request->idbuku)
+                 ->update(["stok_tersedia" => $buku_in_question->stok_tersedia - 1]);
+
 
         $peminjaman = Peminjaman::create([
             'noktp' => $request->noktp,
@@ -169,11 +172,14 @@ class TransaksiController extends Controller
     {
         $petugas = Auth::guard('petugas')->user();
         Transaksi::where("idtransaksi", $request->idtransaksi)
-            ->update([
-                "denda" => $request->denda,
-                "tgl_kembali" => now(),
-                "idpetugas" => $petugas->idpetugas
-            ]);
+                 ->update(["denda" => $request->denda,
+                           "tgl_kembali" => now(),
+                           "idpetugas" => $petugas->idpetugas]);
+
+        $idbuku = Transaksi::where("idtransaksi", $request->idtransaksi)->first()->idbuku;
+        $buku_in_question = Buku::find($idbuku);
+        Buku::where("idbuku", $idbuku)
+            ->update(["stok_tersedia" => $buku_in_question->stok_tersedia + 1]);
         return redirect('/transaksi/pengembalian');
     }
 }
