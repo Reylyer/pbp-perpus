@@ -19,7 +19,7 @@ class TransaksiController extends Controller
     {
         $auth = Auth::guard('anggota')->user();
         if (!$auth) {
-            return redirect('/login');
+            return redirect('/auth/login');
         }
         $selesai = DB::select('SELECT
                                 b.judul,
@@ -118,7 +118,7 @@ class TransaksiController extends Controller
         }
 
         Buku::where("idbuku", $request->idbuku)
-                 ->update(["stok_tersedia" => $buku_in_question->stok_tersedia - 1]);
+            ->update(["stok_tersedia" => $buku_in_question->stok_tersedia - 1]);
 
 
         $peminjaman = Peminjaman::create([
@@ -172,9 +172,11 @@ class TransaksiController extends Controller
     {
         $petugas = Auth::guard('petugas')->user();
         Transaksi::where("idtransaksi", $request->idtransaksi)
-                 ->update(["denda" => $request->denda,
-                           "tgl_kembali" => now(),
-                           "idpetugas" => $petugas->idpetugas]);
+            ->update([
+                "denda" => $request->denda,
+                "tgl_kembali" => now(),
+                "idpetugas" => $petugas->idpetugas
+            ]);
 
         $idbuku = Transaksi::where("idtransaksi", $request->idtransaksi)->first()->idbuku;
         $buku_in_question = Buku::find($idbuku);
