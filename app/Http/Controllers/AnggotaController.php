@@ -13,22 +13,26 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 
-class AnggotaController extends Controller {
+class AnggotaController extends Controller
+{
 
-    function verifikasi(){
+    function verifikasi()
+    {
         $anggota = DB::select("SELECT * FROM anggota WHERE status = 0");
         // dd($anggota);
         return view('anggota.verifikasi', ['data' => $anggota]);
     }
 
-    function riwayat() {
+    function riwayat()
+    {
         // SELECT semua jenis peminjaman
         $peminjamanSelesai = DB::select("SELECT * FROM detail_transaksi LEFT JOIN petugas ON detail_transaksi.idpetugas = petugas.idpetugas LEFT JOIN buku ON detail_transaksi.idbuku = buku.idbuku WHERE tgl_kembali IS NOT NULL");
 
         $peminjamanBerlangsung = DB::select("SELECT * FROM detail_transaksi LEFT JOIN petugas ON detail_transaksi.idpetugas = petugas.idpetugas LEFT JOIN buku ON detail_transaksi.idbuku = buku.idbuku WHERE tgl_kembali IS NULL");
-        
+
         // SELECT peminjaman yang belum dikembalikan dan melebihi tanggal kembali
         // $peminjamanTerlambat = DB::select("SELECT * FROM detail_transaksi LEFT JOIN petugas ON detail_transaksi.idpetugas = petugas.idpetugas LEFT JOIN buku ON detail_transaksi.idbuku = buku.idbuku WHERE tgl_kembali IS NULL AND CURDATE() > tgl_kembali");
 
@@ -38,23 +42,24 @@ class AnggotaController extends Controller {
         $peminjamanTerlambat = DB::select("SELECT *, DATEDIFF(CURDATE(), tgl_pinjam) AS day_late, (DATEDIFF(CURDATE(), tgl_pinjam) * 1000) AS denda FROM peminjaman LEFT JOIN anggota ON anggota.noktp=peminjaman.noktp WHERE CURDATE() > DATE_ADD(tgl_pinjam, INTERVAL 7 DAY)");
 
         // calculate denda for every day is late, + 1000
-        foreach($peminjamanTerlambat as $peminjaman){
+        foreach ($peminjamanTerlambat as $peminjaman) {
             $denda = $peminjaman->day_late * 1000;
             $peminjaman->denda = $denda;
         }
 
-    
+
         return view('anggota.riwayat', [
             'peminjamanSelesai' => $peminjamanSelesai,
             'peminjamanBerlangsung' => $peminjamanBerlangsung,
             'peminjamanTerlambat' => $peminjamanTerlambat,
         ]);
     }
-    
 
-    function doVerifikasi($noktp){
+
+    function doVerifikasi($noktp)
+    {
         $anggota = DB::select("SELECT * FROM anggota WHERE noktp = ?", [$noktp]);
-        if($anggota){
+        if ($anggota) {
             $query = DB::update("UPDATE anggota SET status = 1 WHERE noktp = ?", [$noktp]);
             return redirect()->route('verifikasi.list');
         } else {
@@ -62,14 +67,17 @@ class AnggotaController extends Controller {
         }
     }
     // url/auth/register
-    function register() {
+    function register()
+    {
         return view('register');
     }
-    function login() {
+    function login()
+    {
         return view('login');
     }
 
-    function doRegister(Request $request) {
+    function doRegister(Request $request)
+    {
         $validated = $request->validate([
             'noktp'       => 'required|string|unique:anggota',
             'nama'        => 'required|string',
@@ -87,6 +95,7 @@ class AnggotaController extends Controller {
             $validated['file_ktp'] = end($parts);
             error_log($validated['file_ktp']);
         }
+        $validated['password'] = bcrypt($validated['password']);
 
         $anggota = Anggota::create($validated);
         error_log($anggota);
@@ -95,31 +104,30 @@ class AnggotaController extends Controller {
         return redirect()->route('auth.login');
     }
 
-    function doLogin(Request $request) {
+    function doLogin(Request $request)
+    {
         $user = Anggota::where('email', $request->email)->first();
         $user_type = 'anggota';
-        if($user){
+        if ($user) {
             if ($user->status == 0) {
                 return Redirect::back()->withErrors(['msg' => 'Akun anda belum diaktifkan']);
             }
-        }
-        else if(!$user){
+        } else if (!$user) {
             $user_type = 'petugas';
             $user = Petugas::where('email', $request->email)->first();
-            if(!$user){
+            if (!$user) {
                 return Redirect::back()->withErrors(['msg' => 'Akun tidak ditemukan']);
             }
         }
-        
+
         $credentials = $request->only('email', 'password');
-        if($user_type == 'petugas'){
-            if($user->password == $request->password){
+        if ($user_type == 'petugas') {
+            if (Hash::check($request->password, $user->password)) {
                 Auth::guard('petugas')->login($user);
                 return redirect()->route('crudbuku.list');
             }
-        }
-        else{
-            if($user->password == $request->password){
+        } else {
+            if (Hash::check($request->password, $user->password)) {
                 Auth::guard('anggota')->login($user);
                 return redirect()->route('buku.list');
             }
@@ -127,7 +135,8 @@ class AnggotaController extends Controller {
         return Redirect::back()->withErrors(['msg' => 'Salah kredensial']);
     }
 
-    function doLogout(Request $request) {
+    function doLogout(Request $request)
+    {
         Auth::guard('anggota')->logout();
         Auth::guard('petugas')->logout();
         return redirect()->route('auth.login');
