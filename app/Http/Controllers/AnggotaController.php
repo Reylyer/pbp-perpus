@@ -39,13 +39,11 @@ class AnggotaController extends Controller
         // select from peminjaman where current date is more than tgl_pinjam + 7 days
         // add day_late column to calculate denda based on how many days is late
         // calculate denda for every day is late, + 1000
-        $peminjamanTerlambat = DB::select("SELECT *, DATEDIFF(CURDATE(), tgl_pinjam) AS day_late, (DATEDIFF(CURDATE(), tgl_pinjam) * 1000) AS denda FROM peminjaman LEFT JOIN anggota ON anggota.noktp=peminjaman.noktp WHERE CURDATE() > DATE_ADD(tgl_pinjam, INTERVAL 7 DAY)");
+        $peminjamanTerlambat = DB::select("SELECT *, DATEDIFF(CURDATE(), tgl_pinjam) AS day_late, CASE
+        WHEN TIMESTAMPDIFF(DAY, tgl_pinjam, NOW()) < 14 THEN 0
+        ELSE (TIMESTAMPDIFF(DAY, tgl_pinjam, NOW())-14) * 1000
+        END AS denda FROM peminjaman LEFT JOIN anggota ON anggota.noktp=peminjaman.noktp WHERE CURDATE() > DATE_ADD(tgl_pinjam, INTERVAL 7 DAY)");
 
-        // calculate denda for every day is late, + 1000
-        foreach ($peminjamanTerlambat as $peminjaman) {
-            $denda = $peminjaman->day_late * 1000;
-            $peminjaman->denda = $denda;
-        }
 
 
         return view('anggota.riwayat', [

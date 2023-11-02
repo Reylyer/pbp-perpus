@@ -148,10 +148,10 @@ class TransaksiController extends Controller
                     b.isbn,
                     p.tgl_pinjam,
                     pt.nama as nama_petugas,
-                CASE
-                    WHEN NOW() < dt.tgl_kembali THEN 0
-                    ELSE TIMESTAMPDIFF(DAY, p.tgl_pinjam, NOW()) * 1000
-                END AS denda
+                    CASE
+                    WHEN TIMESTAMPDIFF(DAY, tgl_pinjam, NOW()) < 14 THEN 0
+                    ELSE (TIMESTAMPDIFF(DAY, tgl_pinjam, NOW())-14) * 1000
+                    END AS denda
                 FROM detail_transaksi dt
                 LEFT JOIN buku b ON dt.idbuku = b.idbuku
                 LEFT JOIN peminjaman p ON dt.idtransaksi = p.idtransaksi
